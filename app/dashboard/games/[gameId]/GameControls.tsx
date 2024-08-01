@@ -15,7 +15,7 @@ export function GameControls() {
   const [status, setStatus] = useState(0);
 
   const {
-    game: { currencySymbol, pool, minBid, positions, minRaise, id: gameId },
+    game: { currencySymbol, pool, minBid, maxBid, maxRaise, positions, minRaise, id: gameId },
     userBid,
     bidStatus,
   } = useGameContext();
@@ -29,11 +29,15 @@ export function GameControls() {
       gameId,
     })
       .then(res => {
-        if (res == GameError.INVALID_MIN_RAISE) {
+        if (res & GameError.INVALID_MIN_RAISE) {
           toast.error(`The bid must be raised by at least ${minRaise}!`);
-        } else if (res == GameError.INVALID_MIN_BID) {
+        } else if (res & GameError.INVALID_MIN_BID) {
           toast.error(`The bid must be at least ${minBid}${currencySymbol}!`);
-        } else if (res == -1) {
+        } else if (res & GameError.INVALID_MAX_BID) {
+          toast.error(`Your total bid only be at most ${maxBid!}${currencySymbol}!`);
+        } else if (res & GameError.INVALID_MAX_RAISE) {
+          toast.error(`The bid can only be raised by at most ${maxRaise!}${currencySymbol}!`);
+        } else {
           toast.error('An unexpected error occured!');
         }
       })
