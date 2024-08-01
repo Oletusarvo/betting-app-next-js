@@ -1,58 +1,26 @@
+'use client';
+
+import MuiButton from '@mui/material/Button';
+import { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 import { Spinner } from './Spinner';
-import {
-  ButtonBaseProps,
-  ButtonOwnProps,
-  ButtonPropsVariantOverrides,
-  Button as MuiButton,
-} from '@mui/material';
-import { WithSpinner } from './WithSpinner';
+import { blue } from '@mui/material/colors';
 
-type ButtonProps = React.ComponentProps<'button'> & {
+type ButtonProps = MuiButtonProps & {
   loading?: boolean;
-  variant?: 'primary' | 'secondary';
 };
+export function Button({ children, loading, ...props }: ButtonProps) {
+  const startIcon = loading ? <Spinner /> : props.startIcon;
 
-export function Button({ variant = 'primary', children, loading = false, ...props }: ButtonProps) {
-  const className = [
-    'rounded-md p-2 flex gap-1 items-center',
-    variant === 'primary' ? 'bg-blue-700 hover:bg-blue-400' : 'bg-transparent',
-  ];
-
-  return (
-    <button
-      {...props}
-      className={className.join(' ')}>
-      {loading ? <Spinner /> : null}
-      {children}
-    </button>
-  );
-}
-
-export function PrimaryButton({ children, loading }: Omit<ButtonProps, 'variant'>) {
-  return (
-    <Button
-      variant='primary'
-      loading={loading}>
-      <span className='mx-8'>{children}</span>
-    </Button>
-  );
-}
-
-type ButtonWithLoadingProps = React.ComponentProps<typeof MuiButton> & {
-  loading: boolean;
-};
-
-export function ButtonWithLoading({
-  children,
-  loading,
-  variant,
-  ...props
-}: ButtonWithLoadingProps) {
   return (
     <MuiButton
-      variant={variant}
-      {...props}>
-      {loading ? <WithSpinner>{children}</WithSpinner> : children}
+      {...props}
+      startIcon={startIcon}
+      sx={{
+        ':disabled': {
+          backgroundColor: blue[300],
+        },
+      }}>
+      {children}
     </MuiButton>
   );
 }

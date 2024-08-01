@@ -24,7 +24,7 @@ export function useRegisterForm() {
           } else if (SubmitStatus.UNEXPECTED) {
             toast.error('An unexpected error occured!');
           }
-          updateStatus(result);
+          updateStatus(SubmitStatus.IDLE);
         });
       }
     }

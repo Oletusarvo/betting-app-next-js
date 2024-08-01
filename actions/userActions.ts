@@ -4,10 +4,40 @@ import { options } from 'app/api/auth/[...nextauth]/options';
 import { getServerSession } from 'next-auth';
 import bcrypt from 'bcrypt';
 import { UserError } from './utils/enums/UserError';
+import db from 'dbconfig';
 
 export async function ARegisterUser(credentials: { email: string; password1: string }) {
-  console.log(credentials);
-  return await User.createUser(credentials);
+  const trx = await db.transaction();
+  try {
+    const [{ id: userId }] = await trx('data_users').insert(
+      {
+        email: credentials.email,
+        password: await bcrypt.hash(credentials.password1, 15),
+      },
+      'id'
+    );
+
+    const [defaultCurrencyId] = await trx('data_currencies').where({ symbol: 'MK' }).pluck('id');
+    await trx('data_wallets').insert({
+      currencyId: defaultCurrencyId,
+      balance: 1000 * 100,
+      userId,
+    });
+
+    await trx.commit();
+    return 0;
+  } catch (err: any) {
+    await trx.rollback();
+    const msg = err.message;
+
+    console.log(msg);
+
+    if (msg.includes('DUPLICATE') || msg.includes('UNIQUE')) {
+      return UserError.DUPLICATE;
+    }
+
+    return -1;
+  }
 }
 
 export async function AUpdateEmail(newEmail: string) {

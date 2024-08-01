@@ -8,19 +8,17 @@ import { Blinker } from '@/components/Feature/Blinker';
 export default function LoginPage() {
   return (
     <Main>
-      <div className='flex flex-col items-center justify-center'>
-        <ContentContainer>
-          <Heading>
-            <TypeText
-              text='Login'
-              speed={100}
-              cursor={<Blinker speed={700}>_</Blinker>}
-            />
-          </Heading>
+      <ContentContainer>
+        <Heading>
+          <TypeText
+            text='Login'
+            speed={100}
+            cursor={<Blinker speed={700}>_</Blinker>}
+          />
+        </Heading>
 
-          <LoginForm />
-        </ContentContainer>
-      </div>
+        <LoginForm />
+      </ContentContainer>
     </Main>
   );
 }

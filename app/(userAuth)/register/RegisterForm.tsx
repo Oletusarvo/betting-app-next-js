@@ -1,22 +1,17 @@
 'use client';
 
-import {
-  FormControl,
-  Group,
-  Input,
-  InputDescription,
-  InputError,
-  Label,
-} from '@/components/UI/FormUtils';
+import { FormControl, Input, InputDescription, InputError } from '@/components/UI/FormUtils';
 import Link from 'next/link';
 import { UserAuthForm } from '../UserAuthForm';
 import { useRegisterForm } from './page.hooks';
-import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
+
 import { UserError } from 'actions/utils/enums/UserError';
+import { Button } from '@/components/UI/Button';
+import { SubmitStatus } from '@/hooks/useSubmitData';
 
 export function RegisterForm() {
   const { submit, status, updateData } = useRegisterForm();
+  const loading = status == SubmitStatus.LOADING;
 
   return (
     <UserAuthForm
@@ -74,6 +69,8 @@ export function RegisterForm() {
 
       <div className='flex gap-4 xs:w-full lg:w-auto'>
         <Button
+          loading={loading}
+          disabled={loading}
           type='submit'
           variant='contained'
           fullWidth>
@@ -84,6 +81,8 @@ export function RegisterForm() {
           href='/'
           className='xs:w-full lg:w-auto'>
           <Button
+            loading={loading}
+            disabled={loading}
             variant='outlined'
             fullWidth>
             Cancel
