@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -18,8 +18,10 @@
     "types": ["@testing-library/jest-dom"],
     "paths": {
       "@/components/*": ["components/*"],
-      "@/pages/*": ["pages/*"],
-      "@/styles/*": ["styles/*"]
+      "@/hooks/*": ["hooks/*"],
+      "@/utils/*": ["utils/*"],
+      "@/*": ["/*"],
+      "@/app/*": ["/app/*"]
     },
     "plugins": [
       {
@@ -32,7 +34,13 @@
     "**/*.ts",
     "**/*.tsx",
     "types.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "knexfile.js",
+    "app/api/auth/[...nextauth]/route.js",
+    "app/api/auth/[...nextauth]/options.js",
+    "server.js",
+    "server.mjs",
+    "createIo.mjs"
   ],
   "exclude": ["node_modules"]
 }
