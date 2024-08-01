@@ -8,6 +8,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { ThemeProvider } from '@mui/material';
 import { theme } from 'theme';
+import { socket } from './socket.mjs';
 
 export const metadata = {
   title: process.env.APP_NAME,

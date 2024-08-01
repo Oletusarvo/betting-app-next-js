@@ -7,4 +7,5 @@ export enum GameError {
   CONTESTED = 0x20,
   NO_BID = 0x40,
   MIN_MAX_DIFF = 0x80,
+  INVALID_MAX_BID = 0x100,
 }

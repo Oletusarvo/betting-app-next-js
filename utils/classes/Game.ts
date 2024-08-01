@@ -43,6 +43,34 @@ export class Game extends AppObject<GameType> {
     return false;
   }
 
+  private checkValidRaise(amount: number) {
+    const game = this.m_data;
+
+    /*
+        Allow bidding the current min bid.
+        Otherwise, if bidding higher than the minimum bid, check that the raise is at least as much as the minimum raise, and lower
+        than the maximum raise, if both are defined.
+      */
+    if (amount == game.minBid) return 0;
+
+    const diff = amount - game.minBid;
+    return game.minRaise && diff < game.minRaise
+      ? GameError.INVALID_MIN_RAISE
+      : game.maxRaise && diff > game.maxRaise
+      ? GameError.INVALID_MAX_RAISE
+      : 0;
+  }
+
+  private checkValidMinBid(amount: number) {
+    const game = this.m_data;
+    return amount < game.minBid ? GameError.INVALID_MIN_BID : 0;
+  }
+
+  private checkValidMaxBid(amount: number) {
+    const game = this.m_data;
+    return game.maxBid && amount > game.maxBid ? GameError.INVALID_MAX_BID : 0;
+  }
+
   public get id() {
     return this.data.id;
   }
@@ -55,25 +83,12 @@ export class Game extends AppObject<GameType> {
     const game = this.m_data;
     const bids = this.m_bids;
 
-    const validMinBid = (amount: number) => (amount < game.minBid ? GameError.INVALID_MIN_BID : 0);
-    const validRaise = (amount: number) => {
-      if (!game.minRaise || !game.maxRaise || this.m_pool == 0) return 0;
-
-      //Allow bidding the current min bid. The minimum raise only applies if the amount is higher than the min bid.
-      if (amount == game.minBid) return 0;
-
-      const diff = amount - game.minBid;
-      return diff < game.minRaise
-        ? GameError.INVALID_MIN_RAISE
-        : diff > game.maxRaise
-        ? GameError.INVALID_MAX_RAISE
-        : 0;
-    };
-
     const previousBid = bids.get(newBid.userId);
     const amount = previousBid ? previousBid.amount + newBid.amount : newBid.amount;
 
-    const validationResult = validMinBid(amount) | validRaise(amount);
+    const validationResult =
+      this.checkValidMinBid(amount) | this.checkValidRaise(amount) | this.checkValidMaxBid(amount);
+
     if (validationResult !== 0) return validationResult;
 
     if (previousBid) {
