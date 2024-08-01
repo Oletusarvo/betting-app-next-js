@@ -37,7 +37,7 @@ export function UserMenu({ session }: { session: TODO }) {
               <MenuItem>Settings</MenuItem>
               <MenuItem
                 onClick={() => {
-                  signOut().then(() => router.push('/'));
+                  signOut({ redirect: false }).then(() => router.push('/'));
                 }}>
                 Log out
               </MenuItem>

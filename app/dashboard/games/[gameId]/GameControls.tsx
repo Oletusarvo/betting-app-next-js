@@ -44,8 +44,7 @@ export function GameControls() {
   const isInputDisabled = () =>
     bidStatus == 'folded' || bidStatus == 'at_max_bid' || bidStatus == 'meets_bid' || loading;
 
-  const poolMultiplier = (pool && 1) || 0;
-
+  const minBidAmount = userBid ? minBid - userBid.amount : minBid;
   return (
     <div className='mt-auto'>
       <RoundedBox>
@@ -58,8 +57,8 @@ export function GameControls() {
             type='number'
             placeholder='Type bid amount...'
             step={0.01}
-            min={minBid + poolMultiplier * ((minRaise && minRaise) || 0)}
-            defaultValue={minBid + poolMultiplier * ((minRaise && minRaise) || 0)}
+            min={minBidAmount}
+            defaultValue={minBidAmount}
           />
           <div className='flex gap-2 w-full'>
             <Select

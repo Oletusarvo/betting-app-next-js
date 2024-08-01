@@ -59,6 +59,9 @@ export class Game extends AppObject<GameType> {
     const validRaise = (amount: number) => {
       if (!game.minRaise || !game.maxRaise || this.m_pool == 0) return 0;
 
+      //Allow bidding the current min bid. The minimum raise only applies if the amount is higher than the min bid.
+      if (amount == game.minBid) return 0;
+
       const diff = amount - game.minBid;
       return diff < game.minRaise
         ? GameError.INVALID_MIN_RAISE

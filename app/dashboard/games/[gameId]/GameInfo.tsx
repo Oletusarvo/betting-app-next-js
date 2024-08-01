@@ -45,8 +45,8 @@ export function GameInfo() {
           value={getCurrencyValue(userBid?.amount, 'No bid')}
         />
         <DataRow
-          label='Min. bid (Includes minimum raise)'
-          value={getCurrencyValue(game.minBid + hasPool * (game.minRaise || 0), 'No minimum')}
+          label='Min. bid'
+          value={getCurrencyValue(game.minBid, 'No minimum')}
         />
 
         <DataRow

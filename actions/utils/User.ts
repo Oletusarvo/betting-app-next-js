@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { Knex } from 'knex';
 import { SubmitStatus } from '@/hooks/useSubmitData';
 import { UserError } from './enums/UserError';
-import { UserType } from './types/UserType';
+import { UserType } from 'types/UserType';
 
 export class User extends AppObject<UserType> {
   constructor(data: UserType) {
