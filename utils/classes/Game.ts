@@ -86,10 +86,13 @@ export class Game extends AppObject<GameType> {
     const previousBid = bids.get(newBid.userId);
     const amount = previousBid ? previousBid.amount + newBid.amount : newBid.amount;
 
-    const validationResult =
-      this.checkValidMinBid(amount) | this.checkValidRaise(amount) | this.checkValidMaxBid(amount);
+    const minBidRes = this.checkValidMinBid(amount);
+    const raiseRes = this.checkValidRaise(amount);
+    const maxBidRes = this.checkValidMaxBid(amount);
 
-    if (validationResult !== 0) return validationResult;
+    if (minBidRes) return minBidRes;
+    if (raiseRes) return raiseRes;
+    if (maxBidRes) return maxBidRes;
 
     if (previousBid) {
       previousBid.raise(newBid.amount);

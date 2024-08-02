@@ -30,7 +30,7 @@ module.exports = {
 
   production_migrate: {
     client: 'pg',
-    connection: process.env.DB_PRODUCTION_MIGRATE_URL,
+    connection: process.env.DB_URL,
     ssl: {
       sslmode: 'require',
     },
