@@ -77,17 +77,14 @@ export function RegisterForm() {
           Register Account
         </Button>
 
-        <Link
+        <Button
+          component={Link}
           href='/'
-          className='xs:w-full lg:w-auto'>
-          <Button
-            loading={loading}
-            disabled={loading}
-            variant='outlined'
-            fullWidth>
-            Cancel
-          </Button>
-        </Link>
+          disabled={loading}
+          variant='outlined'
+          fullWidth>
+          Cancel
+        </Button>
       </div>
     </UserAuthForm>
   );

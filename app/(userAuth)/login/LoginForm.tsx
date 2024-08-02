@@ -4,14 +4,17 @@ import { FormControl, Group, Input, InputError, Label } from '@/components/UI/Fo
 import { UserAuthForm } from '../UserAuthForm';
 import Link from 'next/link';
 import { useLoginForm } from './page.hooks';
-import { Button, TextField } from '@mui/material';
+
 import { Spinner } from '@/components/UI/Spinner';
 
 import { SubmitStatus } from '@/hooks/useSubmitData';
 import { UserError } from 'actions/utils/enums/UserError';
+import { Button } from '@/components/UI/Button';
 
 export function LoginForm() {
   const { submit, updateData, status } = useLoginForm();
+
+  const loading = status == SubmitStatus.LOADING;
 
   return (
     <UserAuthForm
@@ -54,21 +57,21 @@ export function LoginForm() {
       <div className='flex gap-4 xs:w-full lg:w-auto'>
         <Button
           fullWidth
-          startIcon={status === SubmitStatus.LOADING ? <Spinner /> : null}
+          loading={loading}
+          disabled={loading}
           variant='contained'
           type='submit'>
           Login
         </Button>
 
-        <Link
+        <Button
+          component={Link}
           href='/'
-          className='xs:w-full lg:w-auto'>
-          <Button
-            variant='outlined'
-            fullWidth>
-            Cancel
-          </Button>
-        </Link>
+          disabled={loading}
+          variant='outlined'
+          fullWidth>
+          Cancel
+        </Button>
       </div>
     </UserAuthForm>
   );

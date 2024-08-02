@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 import knexconfig from './knexfile';
 import knex from 'knex';
 
