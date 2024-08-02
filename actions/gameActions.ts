@@ -45,6 +45,7 @@ export async function ACreateGame(
         minRaise: data.minRaise && data.minRaise * 100,
         maxRaise: data.maxRaise && data.maxRaise * 100,
         currencyId,
+        tax: data.tax,
         authorId: session.user.id,
       },
       'id'
@@ -65,6 +66,23 @@ export async function ACreateGame(
     await trx.rollback();
     console.log(err.message);
     return -1;
+  }
+}
+
+export async function AUpdateGame(id: string, data: TODO) {
+  const trx = await db.transaction();
+
+  try {
+    await trx('data_games').where({ id }).update({
+      expiresAt: data.expiresAt,
+    });
+
+    await trx.commit();
+    return 0;
+  } catch (err: any) {
+    await trx.rollback();
+    console.log(err.message);
+    throw err;
   }
 }
 
@@ -129,12 +147,14 @@ export async function ACloseGame(gameId: string, positionId: string) {
 
     //Add the creator share to the creator of the bid.
     const creatorWallet = await Wallet.loadWallet(game.data.authorId, game.data.currencyId, trx);
+    console.log(result.creatorShare);
     creatorWallet.deposit(result.creatorShare);
     await Wallet.saveWallet(creatorWallet, trx);
 
     //Delete the game.
     await trx('data_games').where({ id: game.id }).del();
     await trx.commit();
+    revalidatePath('/dashboard');
     return 0;
   } catch (err: any) {
     console.log(err.message);

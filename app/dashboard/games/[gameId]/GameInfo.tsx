@@ -58,6 +58,11 @@ export function GameInfo() {
           label='Max. raise'
           value={getCurrencyValue(game.maxRaise, 'No limit')}
         />
+
+        <DataRow
+          label='Expires at'
+          value={(game.expiresAt && new Date(game.expiresAt).toLocaleDateString()) || 'No deadline'}
+        />
       </div>
     </RoundedBox>
   );

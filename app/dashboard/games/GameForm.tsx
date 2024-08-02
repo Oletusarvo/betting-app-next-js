@@ -7,7 +7,7 @@ import { RoundedBox } from '@/components/UI/RoundedBox';
 import { useSubmitData } from '@/hooks/useSubmitData';
 import { GameType } from '@/utils/classes/Game';
 import { Button } from '@mui/material';
-import { ACreateGame } from 'actions/gameActions';
+import { ACreateGame, AUpdateGame } from 'actions/gameActions';
 import { useRouter } from 'next/navigation';
 import { createContext, useRef } from 'react';
 import toast from 'react-hot-toast';
@@ -24,19 +24,31 @@ export function GameForm({ game, options }: GameFormProps) {
     <CreateDataForm
       initialData={{ symbol: 'MK' }}
       createMethod={async data => {
-        return await ACreateGame(
-          data as TODO,
-          data.symbol,
-          tokenInputRef.current?.tokens || []
-        ).then(res => {
-          if (res != 0) {
-            toast.error('Error creating bet!');
-          } else {
-            toast.success('Bet created successfully!');
-          }
+        if (game) {
+          return await AUpdateGame(game.id, data)
+            .then(res => {
+              toast.success('Bet updated successfully!');
+              return res;
+            })
+            .catch((err: any) => {
+              toast.error(err.message);
+              return -1;
+            });
+        } else {
+          return await ACreateGame(
+            data as TODO,
+            data.symbol,
+            tokenInputRef.current?.tokens || []
+          ).then(res => {
+            if (res != 0) {
+              toast.error('Error creating bet!');
+            } else {
+              toast.success('Bet created successfully!');
+            }
 
-          return res;
-        });
+            return res;
+          });
+        }
       }}>
       <Fieldset legend='Main'>
         <FormControl
@@ -60,6 +72,31 @@ export function GameForm({ game, options }: GameFormProps) {
               name='currency'>
               <option value='MK'>MK</option>
             </Select>
+          }
+        />
+
+        <FormControl
+          label='Tax'
+          control={
+            <Input
+              type='number'
+              name='tax'
+              placeholder='Type a tax...'
+              min={0}
+              defaultValue={0}
+              max={99}
+            />
+          }
+          helper='The tax is the precentage amount collected to the creator from the final pool upon bet closure.'
+        />
+
+        <FormControl
+          label='Expiry Date'
+          control={
+            <Input
+              type='date'
+              defaultValue={game && game.expiresAt && new Date(game.expiresAt).toString()}
+            />
           }
         />
       </Fieldset>

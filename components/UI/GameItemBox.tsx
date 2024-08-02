@@ -64,8 +64,7 @@ export function GameItemBox({
                 className='cursor-pointer'
               />
             }>
-            <Link href={`/dashboard/games/${id}/update`}>Manage</Link>
-            <Link href={`/dashboard/games/${id}/close`}>Close</Link>
+            <Link href={`/dashboard/games/${id}/close`}>Close Bet</Link>
           </Menu>
         )}
 

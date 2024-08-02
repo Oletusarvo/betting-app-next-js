@@ -18,6 +18,7 @@ export type GameType = {
   createdAt: number;
   updatedAt: number;
   currencyId: string;
+  expiresAt?: string;
 };
 
 export class Game extends AppObject<GameType> {
@@ -129,21 +130,25 @@ export class Game extends AppObject<GameType> {
 
     const bidValues = Array.from(bids.values());
     const winners = bidValues.filter(bid => bid.data.positionId == positionId);
-    const taxedPool = Math.round(this.m_pool * 0.9);
+    const taxedPool = Math.round(this.m_pool * 0.7);
 
     //The tax data of a game is always an integer between 0 or 100. Thus it shall be divided by 100 when calculating the tax.
-    const tax = Math.round(taxedPool * (game.tax || 0 / 100));
-    const remainder = (this.m_pool - tax) % winners.length;
-    const finalPool = this.m_pool - tax - remainder;
+    const tax = Math.round(taxedPool * ((game.tax || 0) / 100));
 
-    const winnerShare = Math.floor(finalPool / winners.length);
+    const numBeneficiaries = winners.length || this.m_bids.size;
+
+    const remainder = (this.m_pool - tax) % numBeneficiaries;
+    const finalPool = this.m_pool - tax - remainder;
+    const winnerShare = Math.floor(finalPool / numBeneficiaries);
     const creatorShare = tax + remainder;
 
     return {
       errcode: 0,
       winnerShare,
       creatorShare,
-      winners: winners.map(bid => bid.data),
+      winners:
+        (winners.length && winners.map(bid => bid.data)) ||
+        Array.from(this.m_bids.values()).map(bid => bid.data),
     };
   }
 

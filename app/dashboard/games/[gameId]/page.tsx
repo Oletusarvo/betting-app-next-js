@@ -48,7 +48,10 @@ export default async function GamePage({ params }: TODO) {
     'createdAt',
     'updatedAt',
     'id',
+    'authorId',
+    'currencyId',
   ]);
+
   const processedBid = (userBid && divideAllNumbersBy(userBid, 100)) || userBid;
   return (
     <Main>
