@@ -17,11 +17,11 @@ export function useRegisterForm() {
       } else {
         updateStatus(SubmitStatus.LOADING);
         ARegisterUser(credentials).then(result => {
-          if (result === 0) {
+          if (result == 0) {
             toast.success('Account registered successfully!');
-          } else if (result === UserError.DUPLICATE) {
+          } else if (result & UserError.DUPLICATE) {
             toast.error('An account with the provided email already exists!');
-          } else if (SubmitStatus.UNEXPECTED) {
+          } else if (result & SubmitStatus.UNEXPECTED) {
             toast.error('An unexpected error occured!');
           }
           updateStatus(SubmitStatus.IDLE);
