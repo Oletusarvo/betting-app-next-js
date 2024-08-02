@@ -31,13 +31,21 @@ export function GameControls() {
       .then(res => {
         if (res & GameError.INVALID_MIN_RAISE) {
           toast.error(`The bid must be raised by at least ${minRaise}!`);
-        } else if (res & GameError.INVALID_MIN_BID) {
+        }
+
+        if (res & GameError.INVALID_MIN_BID) {
           toast.error(`The bid must be at least ${minBid}${currencySymbol}!`);
-        } else if (res & GameError.INVALID_MAX_BID) {
+        }
+
+        if (res & GameError.INVALID_MAX_BID) {
           toast.error(`Your total bid only be at most ${maxBid!}${currencySymbol}!`);
-        } else if (res & GameError.INVALID_MAX_RAISE) {
+        }
+
+        if (res & GameError.INVALID_MAX_RAISE) {
           toast.error(`The bid can only be raised by at most ${maxRaise!}${currencySymbol}!`);
-        } else {
+        }
+
+        if (res == -1) {
           toast.error('An unexpected error occured!');
         }
       })

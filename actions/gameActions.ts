@@ -76,16 +76,18 @@ export async function APlaceBid(newBid: { gameId: string; positionId: string; am
     //Load the current session, to gain access to the user's id.
     const session = await loadSession();
     const game = await Game.loadGame(newBid.gameId, trx);
-    const p = multiplyPropertiesBy(newBid, 100, ['amount']);
+
+    const newAmount = newBid.amount * 100;
     const result = game.placeBid({
-      ...p,
+      ...newBid,
+      amount: newAmount,
       userId: session.user.id,
     });
     if (result != 0) throw result;
 
     await trx('data_wallets')
       .where({ userId: session.user.id, currencyId: game.data.currencyId })
-      .decrement('balance', p.amount);
+      .decrement('balance', newAmount);
 
     await Game.saveGame(game, trx);
     await trx.commit();

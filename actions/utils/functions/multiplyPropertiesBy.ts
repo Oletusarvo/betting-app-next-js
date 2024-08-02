@@ -1,10 +1,6 @@
-export function multiplyPropertiesBy<K extends string[], T extends {}>(
-  obj: T,
-  by: number,
-  props: K
-) {
+export function multiplyPropertiesBy<T extends {}>(obj: T, by: number, keys: string[] = []) {
   return Object.entries(obj).reduce((newObj, [key, value]) => {
-    if (typeof value == 'number' && props.includes(key)) {
+    if (typeof value == 'number' && keys.includes(key)) {
       newObj[key] = value * by;
     } else {
       newObj[key] = value;

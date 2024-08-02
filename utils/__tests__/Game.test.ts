@@ -21,6 +21,12 @@ describe('Testing minimum bid verification', () => {
   });
 });
 
+describe('Testing minimum bid verification, when the minimum raise is explicitly set to null.', () => {
+  const game = new Game({ minBid: 100, minRaise: null } as TODO, new Map(), []);
+  const result = (game as any).checkValidRaise(250);
+  expect(result).toBe(0);
+});
+
 describe('Testing bid raise verification, when both minRaise and maxRaise have been defined.', () => {
   const bidMap = new Map();
   bidMap.set('0', new Bid({ id: '1', amount: 10 } as TODO));
