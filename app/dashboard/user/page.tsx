@@ -15,6 +15,7 @@ import db from 'dbconfig';
 import { WalletType } from 'types/WalletType';
 import { UserMenu } from './UserMenu';
 import Link from 'next/link';
+import { Heading } from '@/components/UI/Heading';
 
 export default async function UserPage() {
   const session = await loadSession();
@@ -49,7 +50,7 @@ export default async function UserPage() {
           </TopLabel>
         </div>
       </RoundedBox>
-      <h1>Games Created</h1>
+      <Heading>Games Created</Heading>
       <List
         data={gamesCreated}
         onEmptyElement={<span>No games created yet.</span>}
@@ -75,7 +76,7 @@ export default async function UserPage() {
         }}
       />
 
-      <h1>Games Participated In</h1>
+      <Heading className='mt-4'>Games Participated In</Heading>
       <List
         data={gamesParticipatedIn}
         onEmptyElement={<span>No games participated in yet.</span>}

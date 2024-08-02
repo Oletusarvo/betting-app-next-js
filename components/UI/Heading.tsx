@@ -1,3 +1,4 @@
-export const Heading = ({ children }: React.PropsWithChildren) => {
-  return <h1 className='text-slate-500 text-lg font-semibold'>{children}</h1>;
+export const Heading = ({ children, className }: React.ComponentProps<'h1'>) => {
+  const classes = ['text-lg font-semibold', className];
+  return <h1 className={classes.join(' ')}>{children}</h1>;
 };

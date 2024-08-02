@@ -19,7 +19,7 @@ export function GameInfo() {
   };
 
   const DataRow = ({ label, value }: { label: string; value: string | number }) => (
-    <div className='flex items-baseline justify-between'>
+    <div className='flex items-baseline justify-between border-b border-white'>
       <span className='font-semibold'>{label}</span>
       <span>{value}</span>
     </div>
@@ -29,7 +29,7 @@ export function GameInfo() {
 
   return (
     <RoundedBox className='flex flex-col gap-4 flex-1 w-full mt-2'>
-      <div className='flex flex-col gap-1 flex-1 border-b border-slate-200'>
+      <div className='flex flex-col gap-1 flex-1'>
         <div className='flex justify-between items-center'>
           <div className='flex gap-2 items-center'>
             <h1 className='text-lg font-semibold'>{game.title}</h1>
@@ -47,6 +47,11 @@ export function GameInfo() {
         <DataRow
           label='Min. bid'
           value={getCurrencyValue(game.minBid, 'No minimum')}
+        />
+
+        <DataRow
+          label='Min. raise'
+          value={getCurrencyValue(game.minRaise, 'No minimum')}
         />
 
         <DataRow

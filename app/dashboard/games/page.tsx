@@ -2,8 +2,10 @@ import { AddButtonWithSearchBar } from '@/components/Feature/AddButtonWithSearch
 import { List } from '@/components/Feature/List';
 import { SearchBar } from '@/components/Feature/SearchBar';
 import { GameItemBox } from '@/components/UI/GameItemBox';
+import { Heading } from '@/components/UI/Heading';
 import { Main } from '@/components/UI/Main';
 import { RoundedBox } from '@/components/UI/RoundedBox';
+import { BidType } from '@/utils/classes/Bid';
 import { getBidStatus } from '@/utils/getBidStatus';
 import { loadSession } from '@/utils/loadSession';
 import { Add } from '@mui/icons-material';
@@ -26,20 +28,19 @@ export default async function GamesPage({ searchParams }: TODO) {
         queryName='q'
         addUrl='/dashboard/games/create'
       />
-      <h1>Bets</h1>
-      <div className='flex flex-col gap-2'>
+      <Heading>Bets</Heading>
+      <div className='flex flex-col gap-2 flex-1'>
         <List
           data={games}
-          onEmptyElement={<span>No bets yet.</span>}
+          onEmptyElement={<div>No bets yet.</div>}
           ListItemComponent={async ({ item }) => {
-            const [{ pool }] = await db('data_bids')
-              .where({ gameId: item.id })
-              .sum('amount', { as: 'pool' });
-            const [currencySymbol] = await db('data_currencies')
-              .where({ id: item.currencyId })
-              .pluck('symbol');
+            const [[{ pool }], [currencySymbol], [bid]] = (await Promise.all([
+              db('data_bids').where({ gameId: item.id }).sum('amount', { as: 'pool' }),
+              db('data_currencies').where({ id: item.currencyId }).pluck('symbol'),
 
-            const [bid] = await db('data_bids').where({ userId: session.user.id, gameId: item.id });
+              db('data_bids').where({ userId: session.user.id, gameId: item.id }),
+            ])) as [[{ pool: number }], [string], [BidType]];
+
             const bidStatus = getBidStatus(bid, item);
 
             return (

@@ -87,7 +87,12 @@ export function GameForm({ game, options }: GameFormProps) {
               max={99}
             />
           }
-          helper='The tax is the precentage amount collected to the creator from the final pool upon bet closure.'
+          helper={
+            <InputSubLabel>
+              The tax is the precentage amount collected to the creator from the final pool upon bet
+              closure.
+            </InputSubLabel>
+          }
         />
 
         <FormControl
