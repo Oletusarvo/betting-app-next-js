@@ -50,7 +50,7 @@ export default async function GamesPage({ searchParams }: TODO) {
                 <GameItemBox
                   title={item.title}
                   description={item.description}
-                  pool={pool / 100}
+                  pool={pool}
                   currencySymbol={currencySymbol}
                   status={bidStatus}
                 />

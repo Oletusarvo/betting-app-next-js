@@ -115,8 +115,8 @@ export function GameForm({ game, options }: GameFormProps) {
               name='minBid'
               placeholder='Type starting bid...'
               type='number'
-              defaultValue={game && game.minBid / 100}
-              step={0.01}
+              defaultValue={game && game.minBid}
+              step={1}
             />
           }
           helper={<InputSubLabel>The minimum bid amount the game starts with.</InputSubLabel>}
@@ -129,8 +129,8 @@ export function GameForm({ game, options }: GameFormProps) {
               name='minRaise'
               type='number'
               placeholder='Type minimum raise...'
-              defaultValue={game && game.minRaise && game.minRaise / 100}
-              step={0.01}
+              defaultValue={game && game.minRaise}
+              step={1}
             />
           }
           helper={
@@ -146,9 +146,9 @@ export function GameForm({ game, options }: GameFormProps) {
             <Input
               name='maxBid'
               type='number'
-              step={0.01}
+              step={1}
               placeholder='Type maximum bid...'
-              defaultValue={game && game.maxBid && game.maxBid / 100}
+              defaultValue={game && game.maxBid}
             />
           }
           helper={
@@ -166,7 +166,7 @@ export function GameForm({ game, options }: GameFormProps) {
               type='number'
               step={0.01}
               placeholder='Type maximum raise...'
-              defaultValue={game && game.maxRaise && game.maxRaise / 100}
+              defaultValue={game && game.maxRaise}
             />
           }
           helper={

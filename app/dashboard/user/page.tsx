@@ -45,7 +45,7 @@ export default async function UserPage() {
               style={{
                 color: wallet.balance < 0 ? red[600] : wallet.balance > 0 ? green[500] : 'white',
               }}>
-              {(wallet.balance / 100).toLocaleString() + walletCurrency}
+              {wallet.balance.toLocaleString() + walletCurrency}
             </span>
           </TopLabel>
         </div>
@@ -93,7 +93,7 @@ export default async function UserPage() {
             <GameItemBox
               title={item.title}
               status={status}
-              pool={pool && pool / 100}
+              pool={pool}
               currencySymbol={currencySymbol}
             />
           );

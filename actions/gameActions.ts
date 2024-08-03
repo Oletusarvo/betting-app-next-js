@@ -11,6 +11,7 @@ import { multiplyPropertiesBy } from './utils/functions/multiplyPropertiesBy';
 import { GameError } from '@/utils/classes/enums/GameError';
 import { Wallet } from '@/utils/classes/Wallet';
 import { getIo } from 'createIo.mjs';
+import { Bank } from './utils/Bank';
 
 export async function AGetGame(id: number): Promise<GameType | null> {
   const [game] = await db('data_games').where({ id });
@@ -40,10 +41,10 @@ export async function ACreateGame(
     const [{ id: gameId }] = await trx('data_games').insert(
       {
         title: data.title,
-        minBid: data.minBid && data.minBid * 100,
-        maxBid: data.maxBid && data.maxBid * 100,
-        minRaise: data.minRaise && data.minRaise * 100,
-        maxRaise: data.maxRaise && data.maxRaise * 100,
+        minBid: data.minBid && data.minBid,
+        maxBid: data.maxBid && data.maxBid,
+        minRaise: data.minRaise && data.minRaise,
+        maxRaise: data.maxRaise && data.maxRaise,
         currencyId,
         tax: data.tax,
         authorId: session.user.id,
@@ -95,17 +96,28 @@ export async function APlaceBid(newBid: { gameId: string; positionId: string; am
     const session = await loadSession();
     const game = await Game.loadGame(newBid.gameId, trx);
 
-    const newAmount = newBid.amount * 100;
     const result = game.placeBid({
       ...newBid,
-      amount: newAmount,
       userId: session.user.id,
     });
     if (result != 0) throw result;
 
+    const [currentBalance] = await trx('data_wallets')
+      .where({ currencyId: game.data.currencyId, userId: session.user.id })
+      .pluck('balance');
+
+    if (currentBalance <= 0) {
+      await Bank.pullFromReserve(game.data.currencyId, newBid.amount, trx);
+    } else {
+      const balanceDiff = currentBalance - newBid.amount;
+      if (balanceDiff < 0) {
+        await Bank.pullFromReserve(game.data.currencyId, -balanceDiff, trx);
+      }
+    }
+
     await trx('data_wallets')
       .where({ userId: session.user.id, currencyId: game.data.currencyId })
-      .decrement('balance', newAmount);
+      .decrement('balance', newBid.amount);
 
     await Game.saveGame(game, trx);
     await trx.commit();
@@ -139,7 +151,18 @@ export async function ACloseGame(gameId: string, positionId: string) {
     //Imburse the winners:
     const imbursePromises = result.winners.map(async winner => {
       const wallet = await Wallet.loadWallet(winner.userId, game.data.currencyId, trx);
+      const balanceBeforeDeposit = wallet.data.balance;
       wallet.deposit(result.winnerShare);
+
+      if (balanceBeforeDeposit < 0) {
+        const amountToPutInReserve =
+          wallet.data.balance < 0
+            ? wallet.data.balance - balanceBeforeDeposit
+            : Math.abs(balanceBeforeDeposit);
+
+        await Bank.putInReserve(game.data.currencyId, amountToPutInReserve, trx);
+      }
+
       await Wallet.saveWallet(wallet, trx);
     });
 
@@ -147,7 +170,6 @@ export async function ACloseGame(gameId: string, positionId: string) {
 
     //Add the creator share to the creator of the bid.
     const creatorWallet = await Wallet.loadWallet(game.data.authorId, game.data.currencyId, trx);
-    console.log(result.creatorShare);
     creatorWallet.deposit(result.creatorShare);
     await Wallet.saveWallet(creatorWallet, trx);
 
@@ -157,9 +179,14 @@ export async function ACloseGame(gameId: string, positionId: string) {
     revalidatePath('/dashboard');
     return 0;
   } catch (err: any) {
-    console.log(err.message);
     await trx.rollback();
-    return err.message;
+    if (typeof err == 'object' && 'message' in err) {
+      console.log(err.message);
+    } else if (typeof err == 'number') {
+      return err;
+    } else {
+      throw err;
+    }
   }
 }
 

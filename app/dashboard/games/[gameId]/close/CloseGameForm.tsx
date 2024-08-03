@@ -2,6 +2,7 @@
 
 import { FormControl, Select } from '@/components/UI/FormUtils';
 import { Spinner } from '@/components/UI/Spinner';
+import { GameError } from '@/utils/classes/enums/GameError';
 import { Check } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { ACloseGame } from 'actions/gameActions';
@@ -18,11 +19,10 @@ export function CloseGameForm({ gameId, options }: TODO) {
     setStatus(1);
     await ACloseGame(gameId, e.target.option.value)
       .then(res => {
-        if (res == 0) {
+        if (res == GameError.CONTESTED) {
+          toast.error('Not all bet participants have bid the minimum. Cannot close!');
+        } else if (res == 0) {
           toast.success('Bet closed successfully!');
-          router.push('/dashboard/games');
-        } else {
-          throw res;
         }
       })
       .catch(err => {

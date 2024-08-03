@@ -44,20 +44,11 @@ export default async function GamePage({ params }: TODO) {
         : 'meets_bid')) ||
     'no_bid';
 
-  const processedGame = divideAllNumbersBy({ ...game, pool }, 100, [
-    'createdAt',
-    'updatedAt',
-    'id',
-    'authorId',
-    'currencyId',
-  ]);
-
-  const processedBid = (userBid && divideAllNumbersBy(userBid, 100)) || userBid;
   return (
     <Main>
       <GameProvider
-        game={{ ...processedGame, positions, currencySymbol }}
-        userBid={processedBid}
+        game={{ ...game, positions, currencySymbol, pool }}
+        userBid={userBid}
         bidStatus={bidStatus}>
         <GameInfo />
         <PoolDisplay />

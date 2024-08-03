@@ -10,6 +10,7 @@ import { useState } from 'react';
 
 import toast from 'react-hot-toast';
 import { GameError } from '@/utils/classes/enums/GameError';
+import { BidType } from '@/utils/classes/Bid';
 
 export function GameControls() {
   const [status, setStatus] = useState(0);
@@ -20,15 +21,46 @@ export function GameControls() {
     bidStatus,
   } = useGameContext();
 
+  const validateBid = (bid: BidType) => {
+    const bidAmount = (userBid && userBid.amount + bid.amount) || bid.amount;
+
+    if (bidAmount < minBid) {
+      toast.error(`The bid must be at least ${minBid}${currencySymbol}!`);
+      return false;
+    }
+
+    if (minRaise && bidAmount > minBid) {
+      const diff = bidAmount - minBid;
+      if (diff < minRaise) {
+        toast.error(`The bid must be raised by at least ${minRaise}!`);
+        return false;
+      }
+    }
+
+    if (maxRaise && bidAmount > minBid) {
+      const raiseAmount = bidAmount - minBid;
+      if (raiseAmount > maxRaise) {
+        toast.error(`The minimum bid can only be raised by at most ${maxRaise!}${currencySymbol}!`);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e: TODO) => {
     e.preventDefault();
     setStatus(1);
-    await APlaceBid({
+    const bid = {
       amount: e.target.amount.valueAsNumber,
       positionId: e.target.positionId.value,
       gameId,
-    })
-      .then(res => {
+    };
+
+    const isValid = validateBid(bid as BidType);
+
+    if (isValid) {
+      await APlaceBid(bid).then(res => {
         if (res == GameError.INVALID_MIN_RAISE) {
           toast.error(`The bid must be raised by at least ${minRaise}!`);
         }
@@ -38,18 +70,22 @@ export function GameControls() {
         }
 
         if (res == GameError.INVALID_MAX_BID) {
-          toast.error(`Your total bid only be at most ${maxBid!}${currencySymbol}!`);
+          toast.error(`Your total bid can only be at most ${maxBid!}${currencySymbol}!`);
         }
 
         if (res == GameError.INVALID_MAX_RAISE) {
-          toast.error(`The bid can only be raised by at most ${maxRaise!}${currencySymbol}!`);
+          toast.error(
+            `The minimum bid can only be raised by at most ${maxRaise!}${currencySymbol}!`
+          );
         }
 
         if (res == -1) {
           toast.error('An unexpected error occured!');
         }
-      })
-      .finally(() => setStatus(0));
+      });
+    }
+
+    setStatus(0);
   };
 
   const loading = status == 1;
@@ -57,6 +93,7 @@ export function GameControls() {
     bidStatus == 'folded' || bidStatus == 'at_max_bid' || bidStatus == 'meets_bid' || loading;
 
   const minBidAmount = userBid ? minBid - userBid.amount : minBid;
+
   return (
     <div className='mt-auto'>
       <RoundedBox>
@@ -68,7 +105,7 @@ export function GameControls() {
             name='amount'
             type='number'
             placeholder='Type bid amount...'
-            step={0.01}
+            step={1}
             min={minBidAmount}
             defaultValue={minBidAmount}
           />
@@ -96,7 +133,7 @@ export function GameControls() {
                   backgroundColor: red[700],
                 },
               }}>
-              {bidStatus == 'must_call' ? 'Call' : 'Place Bid'}
+              {(userBid && 'Call') || 'Place Bid'}
             </Button>
           </div>
         </form>
