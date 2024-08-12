@@ -38,12 +38,10 @@ export default async function GamesPage({ searchParams }: TODO) {
         <List
           data={games}
           onEmptyElement={
-            <Blinker speed={200}>
-              <TypeText
-                text='No bets yet.'
-                cursor='_'
-              />
-            </Blinker>
+            <TypeText
+              text='No bets yet.'
+              cursor={<Blinker speed={200}>_</Blinker>}
+            />
           }
           ListItemComponent={async ({ item }) => {
             const [[{ pool }], [currencySymbol], [bid]] = (await Promise.all([

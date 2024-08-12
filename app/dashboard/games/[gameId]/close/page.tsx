@@ -7,6 +7,9 @@ import { Blinker } from '@/components/Feature/Blinker';
 
 export default async function CloseGamePage({ params }: TODO) {
   const gameId = params.gameId;
+  const [{ title, description }] = await db('data_games')
+    .where({ id: gameId })
+    .select('title', 'description');
   const options = await db('data_gamePositions').where({ gameId });
 
   return (
@@ -18,6 +21,12 @@ export default async function CloseGamePage({ params }: TODO) {
           cursor={<Blinker speed={700}>_</Blinker>}
         />
       </Heading>
+
+      <div className='flex flex-col mt-4'>
+        <h2 className='text-xl font-semibold'>{title}</h2>
+        <p>{description || 'No description.'}</p>
+      </div>
+
       <CloseGameForm
         gameId={gameId}
         options={options}

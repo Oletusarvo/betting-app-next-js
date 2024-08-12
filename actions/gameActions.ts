@@ -142,7 +142,6 @@ export async function ACloseGame(gameId: string, positionId: string) {
     const result = game.close(positionId);
     if (result.errcode !== 0) throw result.errcode;
 
-    console.log(result);
     //Imburse the winners:
     const imbursePromises = result.winners.map(async winner => {
       const wallet = await Wallet.loadWallet(winner.userId, game.data.currencyId, trx);

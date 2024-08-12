@@ -33,7 +33,7 @@ export default async function DashboardLayout({ children }: TODO) {
           labelPosition='right'>
           <span className={balanceClasses.join(' ')}>
             {wallet.balance.toLocaleString('en')}
-            {walletCurrency}
+            <span className='text-[8pt]'>{walletCurrency}</span>
           </span>
         </TopLabel>
       </header>

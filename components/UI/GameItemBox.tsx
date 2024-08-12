@@ -11,6 +11,7 @@ import { TopLabel } from './TopLabel';
 import { GameType } from '@/utils/classes/Game';
 import { BidType } from '@/utils/classes/Bid';
 import { IconButtonLink } from '../Feature/IconButtonLink';
+import { CurrencySymbolContainer } from './CurrencySymbolContainer';
 
 export type GameItemBoxProps = {
   game: GameType;
@@ -82,7 +83,7 @@ export function GameItemBox({
         <div className='flex items-center justify-between w-full mb-4'>
           <span className='font-semibold'>Pool</span>
           <span className='text-lg font-semibold'>
-            {pool || 'No Bids'}
+            {(pool && pool.toLocaleString('en')) || 'No Bids'}
             {pool && (
               <>
                 {currencySymbol}
@@ -94,19 +95,22 @@ export function GameItemBox({
           </span>
         </div>
         <div className='flex w-full justify-between gap-2'>
-          <TopLabel labelText='Your bid'>{(userBid && userBid.amount) || 'No bid'}</TopLabel>
+          <TopLabel labelText='Your bid'>
+            {(userBid && userBid.amount.toLocaleString('en')) || 'No bid'}
+            {userBid && <CurrencySymbolContainer>{currencySymbol}</CurrencySymbolContainer>}
+          </TopLabel>
           <TopLabel
             labelPosition='left'
             labelText='Minimum'>
-            {game.minBid}
-            <small className='text-sm'>{currencySymbol}</small>
+            {game.minBid.toLocaleString('en')}
+            <CurrencySymbolContainer>{currencySymbol}</CurrencySymbolContainer>
           </TopLabel>
 
           <TopLabel
             labelPosition='left'
             labelText='Raise'>
-            {game.minRaise || 'No minimum'}
-            <small className='text-sm'>{game.minRaise && currencySymbol}</small>
+            {(game.minRaise && game.minRaise.toLocaleString('en')) || 'No minimum'}
+            <CurrencySymbolContainer>{game.minRaise && currencySymbol}</CurrencySymbolContainer>
           </TopLabel>
         </div>
       </ItemBox.Body>
