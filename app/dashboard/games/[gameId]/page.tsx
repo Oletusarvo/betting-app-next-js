@@ -45,15 +45,15 @@ export default async function GamePage({ params }: TODO) {
     'no_bid';
 
   return (
-    <Main>
-      <GameProvider
-        game={{ ...game, positions, currencySymbol, pool }}
-        userBid={userBid}
-        bidStatus={bidStatus}>
+    <GameProvider
+      game={{ ...game, positions, currencySymbol, pool }}
+      userBid={userBid}
+      bidStatus={bidStatus}>
+      <Main>
         <GameInfo />
         <PoolDisplay />
         <GameControls />
-      </GameProvider>
-    </Main>
+      </Main>
+    </GameProvider>
   );
 }

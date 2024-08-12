@@ -56,21 +56,21 @@ export function LoginForm() {
 
       <div className='flex gap-4 xs:w-full lg:w-auto'>
         <Button
-          fullWidth
-          loading={loading}
-          disabled={loading}
-          variant='contained'
-          type='submit'>
-          Login
-        </Button>
-
-        <Button
-          component={Link}
           href='/'
+          type='button'
           disabled={loading}
           variant='outlined'
           fullWidth>
           Cancel
+        </Button>
+
+        <Button
+          fullWidth
+          disabled={loading}
+          loading={loading}
+          variant='contained'
+          type='submit'>
+          Login
         </Button>
       </div>
     </UserAuthForm>

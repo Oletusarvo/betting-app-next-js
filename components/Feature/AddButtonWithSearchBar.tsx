@@ -1,7 +1,7 @@
-import { Button } from '@mui/material';
 import { SearchBar } from './SearchBar';
 import { Add } from '@mui/icons-material';
 import Link from 'next/link';
+import { Button } from '../UI/Button';
 
 type AddButtonWithSearchBarProps = {
   queryName: string;
@@ -15,7 +15,7 @@ export function AddButtonWithSearchBar({
   addUrl,
 }: AddButtonWithSearchBarProps) {
   return (
-    <div className='flex justify-between mt-4 w-full gap-2'>
+    <div className='flex justify-between mt-4 w-full gap-1'>
       <SearchBar
         queryName={queryName}
         placeholder={searchPlaceholder}

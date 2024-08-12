@@ -1,29 +1,24 @@
+import { IconButton } from '@mui/material';
 import Link from 'next/link';
+import React from 'react';
 import { useEffect, useRef } from 'react';
 
 type IconLinkProps = React.ComponentProps<typeof Link> & {
   selected?: boolean;
-  icon: string;
+  icon: React.ReactElement;
 };
 
 export function IconLink({ selected = false, icon, ...props }: IconLinkProps) {
-  const ref = useRef<HTMLAnchorElement>(null);
-
-  useEffect(() => {
-    const highlightColor = 'text-blue-200';
-
-    if (selected) {
-      ref.current?.classList.add(highlightColor);
-    } else {
-      ref.current?.classList.remove(highlightColor);
-    }
-  }, [selected]);
-
   return (
-    <Link
-      {...props}
-      ref={ref}>
-      <i className={`fa ${icon}`} />
-    </Link>
+    <IconButton href={props.href.toString()}>
+      {React.cloneElement(icon, {
+        ...icon.props,
+        sx: {
+          ...icon.props.sx,
+          fontSize: '2rem',
+        },
+        className: [selected ? 'text-primary' : 'text-darkGrey'].join(' '),
+      })}
+    </IconButton>
   );
 }

@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { createContext, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { Button } from '../UI/Button';
+import { Check } from '@mui/icons-material';
 
 type CreateDataFormProps<T> = React.PropsWithChildren & {
   createMethod: (data: T) => Promise<number>;
@@ -37,14 +38,15 @@ export function CreateDataForm<T>({ children, createMethod, initialData }: Creat
   const loading = status == SubmitStatus.LOADING;
   return (
     <form
-      className='flex gap-2 flex-col w-full'
+      className='flex flex-col w-full'
       onSubmit={submit}
       onChange={updateData}>
       {children}
 
-      <div className='flex w-full justify-end gap-2'>
+      <div className='flex w-full justify-end gap-2 mt-2'>
         <Button
           variant='text'
+          type='button'
           disabled={loading}
           onClick={() => router.back()}>
           Cancel
@@ -54,6 +56,8 @@ export function CreateDataForm<T>({ children, createMethod, initialData }: Creat
           loading={loading}
           disabled={loading}
           type='submit'
+          color='primary'
+          startIcon={<Check />}
           variant='contained'>
           Submit
         </Button>

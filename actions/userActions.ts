@@ -18,9 +18,17 @@ export async function ARegisterUser(credentials: { email: string; password1: str
     );
 
     const [defaultCurrencyId] = await trx('data_currencies').where({ symbol: 'MK' }).pluck('id');
-    await trx('data_wallets').insert({
-      currencyId: defaultCurrencyId,
+    const [walletId] = await trx('data_wallets').insert(
+      {
+        currencyId: defaultCurrencyId,
+        userId,
+      },
+      'id'
+    );
+
+    await trx('data_defaultWallets').insert({
       userId,
+      walletId,
     });
 
     await trx.commit();

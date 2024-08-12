@@ -1,8 +1,13 @@
-export function TopLabel({ children, labelText }: React.PropsWithChildren & { labelText: string }) {
+export function TopLabel({
+  children,
+  labelText,
+  labelPosition = 'left',
+}: React.PropsWithChildren & { labelText: string; labelPosition?: 'left' | 'center' | 'right' }) {
+  const labelClasses = ['text-sm w-full', `text-${labelPosition}`];
   return (
     <div className='flex flex-col'>
-      <small className='text-sm w-full text-right'>{labelText}</small>
-      <div className='text-right'>{children}</div>
+      <small className={labelClasses.join(' ')}>{labelText}</small>
+      <div className={`text-${labelPosition}`}>{children}</div>
     </div>
   );
 }

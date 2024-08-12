@@ -19,9 +19,9 @@ export function RegisterForm() {
       onChange={updateData}>
       <FormControl
         label='Email'
+        required
         control={
           <Input
-            required
             placeholder='Type your email address...'
             name='email'
             type='email'
@@ -36,9 +36,9 @@ export function RegisterForm() {
 
       <FormControl
         label='Password'
+        required
         control={
           <Input
-            required
             placeholder='Type your email address...'
             name='password1'
             autoComplete='off'
@@ -69,21 +69,20 @@ export function RegisterForm() {
 
       <div className='flex gap-4 xs:w-full lg:w-auto'>
         <Button
+          href='/'
+          type='button'
+          disabled={loading}
+          variant='outlined'
+          fullWidth>
+          Cancel
+        </Button>
+        <Button
           loading={loading}
           disabled={loading}
           type='submit'
           variant='contained'
           fullWidth>
-          Register Account
-        </Button>
-
-        <Button
-          component={Link}
-          href='/'
-          disabled={loading}
-          variant='outlined'
-          fullWidth>
-          Cancel
+          Register
         </Button>
       </div>
     </UserAuthForm>

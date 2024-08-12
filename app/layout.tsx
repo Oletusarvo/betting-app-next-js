@@ -24,11 +24,11 @@ export default function AppLayout({ children }: React.PropsWithChildren) {
         />
       </head>
 
-      <body className='flex flex-col min-h-screen bg-gradient-to-b from-black via-black to-blue-950'>
+      <body className='flex flex-col min-h-screen'>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </AppRouterCacheProvider>
-        <Toaster position='bottom-right'></Toaster>
+        <Toaster position='top-center'></Toaster>
       </body>
     </html>
   );

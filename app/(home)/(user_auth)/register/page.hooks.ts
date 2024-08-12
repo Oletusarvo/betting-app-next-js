@@ -22,13 +22,13 @@ export function useRegisterForm() {
         await ARegisterUser(credentials).then(result => {
           if (result == 0) {
             toast.success('Account registered successfully!');
+            router.push('/login');
           } else if (result == UserError.DUPLICATE) {
             toast.error('An account with the provided email already exists!');
           } else {
             toast.error('An unexpected error occured!');
           }
           updateStatus(SubmitStatus.IDLE);
-          router.push('/login');
         });
       }
     }

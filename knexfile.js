@@ -8,10 +8,22 @@ require('dotenv').config();
 
 module.exports = {
   development: {
-    client: 'sqlite3',
+    client: 'pg',
+
     connection: {
-      filename: './dev.sqlite3',
+      host: 'localhost',
+      user: 'dev_user',
+      password: process.env.DEV_DB_PASSWORD,
+      database: 'WagerWave_Dev',
     },
+
+    pool: {
+      min: 2,
+      max: 10,
+
+      idleTimeoutMillis: 10000,
+    },
+
     useNullAsDefault: true,
   },
 

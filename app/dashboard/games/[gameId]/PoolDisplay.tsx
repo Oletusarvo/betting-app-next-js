@@ -13,6 +13,19 @@ export function PoolDisplay() {
     bidStatus,
   } = useGameContext();
 
+  const ringClassName = [
+    'flex aspect-square w-[200px] border-[2px] items-center justify-center rounded-full',
+    bidStatus == 'must_call'
+      ? 'border-call'
+      : bidStatus == 'meets_bid'
+      ? 'border-slate-500'
+      : bidStatus == 'at_max_bid'
+      ? 'border-warning'
+      : bidStatus == 'folded'
+      ? 'border-blue-300'
+      : 'border-green-400',
+  ];
+
   const ringColorStyle: CSSProperties = {
     borderColor:
       bidStatus == 'must_call'
@@ -30,16 +43,12 @@ export function PoolDisplay() {
     bidStatus == 'folded' ? 'Folded' : bidStatus == 'must_call' ? 'Must Call' : 'Ok';
 
   return (
-    <RoundedBox className='flex flex-1 flex-col justify-center relative'>
-      <div className='w-full flex flex-col gap-2 justify-center items-center'>
-        <div
-          className='flex aspect-square w-[200px] border-[2px] items-center justify-center rounded-full'
-          style={ringColorStyle}>
-          <span className='text-2xl'>
-            {(pool && pool.toLocaleString()) || 0}
-            <span className='text-base'>{currencySymbol}</span>
-          </span>
-        </div>
+    <RoundedBox className='flex flex-1 flex-col justify-center items-center relative h-full'>
+      <div className={ringClassName.join(' ')}>
+        <span className='text-2xl'>
+          {(pool && pool.toLocaleString()) || 0}
+          <span className='text-base'>{currencySymbol}</span>
+        </span>
       </div>
     </RoundedBox>
   );

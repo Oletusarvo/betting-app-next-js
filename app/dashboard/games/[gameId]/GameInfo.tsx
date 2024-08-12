@@ -7,6 +7,7 @@ import { ChipLabel } from '@/components/UI/ChipLabel';
 import { StatusBadge } from '@/components/UI/GameItemBox';
 import { ArrowBack } from '@mui/icons-material';
 import { BackButton } from './BackButton';
+import { ItemBox } from '@/components/UI/ItemBox';
 
 export function GameInfo() {
   const { userBid, game, bidStatus } = useGameContext();
@@ -28,47 +29,14 @@ export function GameInfo() {
   const hasPool = game.pool && game.pool > 0 ? 1 : 0;
 
   return (
-    <RoundedBox className='flex flex-col gap-4 flex-1 w-full mt-2'>
-      <div className='flex flex-col gap-1 flex-1'>
-        <div className='flex justify-between items-center'>
-          <div className='flex gap-2 items-center'>
-            <h1 className='text-lg font-semibold'>{game.title}</h1>
-          </div>
+    <ItemBox>
+      <ItemBox.Header>
+        <ItemBox.Title>{game.title}</ItemBox.Title>
+      </ItemBox.Header>
 
-          <StatusBadge status={bidStatus} />
-        </div>
-      </div>
-
-      <div className='flex flex-col gap-2 flex-1 mt-auto'>
-        <DataRow
-          label='Your bid'
-          value={getCurrencyValue(userBid?.amount, 'No bid')}
-        />
-        <DataRow
-          label='Min. bid'
-          value={getCurrencyValue(game.minBid, 'No minimum')}
-        />
-
-        <DataRow
-          label='Min. raise'
-          value={getCurrencyValue(game.minRaise, 'No minimum')}
-        />
-
-        <DataRow
-          label='Max. bid'
-          value={getCurrencyValue(game.maxBid, 'No limit')}
-        />
-
-        <DataRow
-          label='Max. raise'
-          value={getCurrencyValue(game.maxRaise, 'No limit')}
-        />
-
-        <DataRow
-          label='Expires at'
-          value={(game.expiresAt && new Date(game.expiresAt).toLocaleDateString()) || 'No deadline'}
-        />
-      </div>
-    </RoundedBox>
+      <ItemBox.Body>
+        <p>{game.description || 'No description.'}</p>
+      </ItemBox.Body>
+    </ItemBox>
   );
 }

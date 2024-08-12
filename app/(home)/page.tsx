@@ -4,7 +4,7 @@ import { Main } from '@/components/UI/Main';
 import Link from 'next/link';
 import IndexHeader from './indexHeader';
 import Title from './Title';
-import { Button } from '@mui/material';
+import { Button } from '@/components/UI/Button';
 
 export default async function HomePage() {
   return (
@@ -18,13 +18,17 @@ export default async function HomePage() {
           </p>
 
           <div className='flex flex-row gap-4 mt-8'>
-            <Link href='/register'>
-              <Button variant='contained'>Register</Button>
-            </Link>
+            <Button
+              href='/register'
+              variant='contained'>
+              Register
+            </Button>
 
-            <Link href='/login'>
-              <Button variant='outlined'>Login</Button>
-            </Link>
+            <Button
+              href='/login'
+              variant='outlined'>
+              Login
+            </Button>
           </div>
         </div>
       </div>

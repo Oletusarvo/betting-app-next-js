@@ -135,7 +135,7 @@ export class Game extends AppObject<GameType> {
     //The tax data of a game is always an integer between 0 or 100. Thus it shall be divided by 100 when calculating the tax.
     const tax = Math.round(taxedPool * ((game.tax || 0) / 100));
 
-    const numBeneficiaries = winners.length || this.m_bids.size;
+    const numBeneficiaries = winners.length || this.m_bids.size || 1;
 
     const remainder = (this.m_pool - tax) % numBeneficiaries;
     const finalPool = this.m_pool - tax - remainder;

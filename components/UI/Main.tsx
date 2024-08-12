@@ -1,6 +1,8 @@
 export function Main({ children }: React.PropsWithChildren) {
   return (
-    <main className='h-full flex flex-col text-white xs:mx-2 md:mx-80 pb-16 gap-2'>{children}</main>
+    <main className='w-full h-[100%] flex flex-col flex-1 xs:px-1 md:px-80 pb-20 gap-2 xs:justify-center md:justify-start'>
+      {children}
+    </main>
   );
 }
 

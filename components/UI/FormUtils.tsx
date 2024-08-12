@@ -6,14 +6,25 @@ export const Group = ({ children }: React.PropsWithChildren) => {
 };
 
 export const Label = ({ children }: React.PropsWithChildren) => {
-  return <label className='text-base'>{children}</label>;
+  return <label className='text-base font-semibold'>{children}</label>;
 };
 
 export const Input = forwardRef((props: React.ComponentProps<'input'>, ref: TODO) => {
   return (
     <input
       ref={ref}
-      className='rounded-md px-4 py-2 text-xl text-blue-800 md:min-w-[400px] border border-slate-300 w-full'
+      className='rounded-md px-4 py-2 text-xl text-slate-700 md:min-w-[400px] border border-slate-200 w-full'
+      {...props}
+    />
+  );
+});
+
+export const Textarea = forwardRef((props: React.ComponentProps<'textarea'>, ref: TODO) => {
+  return (
+    <textarea
+      spellCheck={false}
+      ref={ref}
+      className='rounded-md px-4 py-2 text-xl text-slate-700 md:min-w-[400px] border border-slate-200 w-full resize-none'
       {...props}
     />
   );
@@ -23,20 +34,20 @@ export const Select = ({ children, ...props }: React.ComponentProps<'select'>) =
   return (
     <select
       {...props}
-      className='rounded-md px-4 py-2 text-xl text-blue-800 md:min-w-[400px] border border-slate-300'>
+      className='rounded-md px-4 py-2 text-xl md:min-w-[400px] border border-slate-200'>
       {children}
     </select>
   );
 };
 
 export const InputSubLabel = ({ children }: React.PropsWithChildren) => {
-  return <div className='w-full text-sm'>{children}</div>;
+  return <div className='w-full text-sm text-slate-500'>{children}</div>;
 };
 
 export const InputDescription = ({ children }: React.PropsWithChildren) => {
   return (
     <InputSubLabel>
-      <span className='text-white'>{children}</span>
+      <span>{children}</span>
     </InputSubLabel>
   );
 };
@@ -57,7 +68,7 @@ type FormControlProps = {
 };
 export const FormControl = ({ label, control, helper, required }: FormControlProps) => {
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-1'>
       <Label>{label}</Label>
       {React.cloneElement(control, {
         ...control.props,
@@ -78,9 +89,11 @@ export const Fieldset = ({
   return (
     <fieldset
       {...props}
-      className='border border-blue-900 p-2 rounded-md flex flex-col gap-4 bg-blue-950'>
-      <legend className='mx-2 font-semibold'>{legend}</legend>
-      {children}
+      className='border-[2px] border-slate-200 rounded-lg flex flex-col bg-white relative overflow-hidden'>
+      <div className='w-full font-bold px-2 uppercase py-4 mb-4 bg-darkGrey text-white text-sm'>
+        {legend}
+      </div>
+      <div className='flex flex-col gap-4 p-2'>{children}</div>
     </fieldset>
   );
 };

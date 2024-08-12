@@ -2,7 +2,14 @@
 
 import { CreateDataForm } from '@/components/Feature/CreateDataForm';
 import { TokenInput } from '@/components/Feature/TokenInput';
-import { Fieldset, FormControl, Input, InputSubLabel, Select } from '@/components/UI/FormUtils';
+import {
+  Fieldset,
+  FormControl,
+  Input,
+  InputSubLabel,
+  Select,
+  Textarea,
+} from '@/components/UI/FormUtils';
 import { RoundedBox } from '@/components/UI/RoundedBox';
 import { useSubmitData } from '@/hooks/useSubmitData';
 import { GameType } from '@/utils/classes/Game';
@@ -64,6 +71,15 @@ export function GameForm({ game, options }: GameFormProps) {
         />
 
         <FormControl
+          label='Description'
+          control={
+            <Textarea
+              name='description'
+              placeholder='Write a description for the bet...'></Textarea>
+          }
+        />
+
+        <FormControl
           label='Currency'
           required
           control={
@@ -76,7 +92,7 @@ export function GameForm({ game, options }: GameFormProps) {
         />
 
         <FormControl
-          label='Tax'
+          label='Tax (%)'
           control={
             <Input
               type='number'

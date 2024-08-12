@@ -5,7 +5,7 @@ import { GameForm } from '../GameForm';
 export default async function AddGamePage() {
   return (
     <Main>
-      <h1>Create Bet</h1>
+      <Heading>Create Bet</Heading>
       <GameForm />
     </Main>
   );

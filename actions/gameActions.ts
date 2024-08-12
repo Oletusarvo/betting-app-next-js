@@ -13,15 +13,8 @@ import { Wallet } from '@/utils/classes/Wallet';
 import { getIo } from 'createIo.mjs';
 import { Bank } from './utils/Bank';
 
-export async function AGetGame(id: number): Promise<GameType | null> {
-  const [game] = await db('data_games').where({ id });
-  const bids = await db('data_bids').where({ gameId: id });
-  const pool = bids.reduce((acc, cur) => (acc += cur.amount), 0);
-  return {
-    ...game,
-    bids,
-    pool,
-  };
+export async function AGetGames(query: TODO) {
+  return db('data_games').where(query);
 }
 
 export async function ACreateGame(
@@ -48,6 +41,7 @@ export async function ACreateGame(
         currencyId,
         tax: data.tax,
         authorId: session.user.id,
+        description: data.description,
       },
       'id'
     );
@@ -148,6 +142,7 @@ export async function ACloseGame(gameId: string, positionId: string) {
     const result = game.close(positionId);
     if (result.errcode !== 0) throw result.errcode;
 
+    console.log(result);
     //Imburse the winners:
     const imbursePromises = result.winners.map(async winner => {
       const wallet = await Wallet.loadWallet(winner.userId, game.data.currencyId, trx);

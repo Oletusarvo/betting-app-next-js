@@ -1,9 +1,11 @@
 import { useInputData } from '@/hooks/useInputData';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { Input } from '../UI/FormUtils';
-import { Button, Chip } from '@mui/material';
+
 import { Cancel, Close, Delete, HighlightOff } from '@mui/icons-material';
 import { blue } from '@mui/material/colors';
+import { Chip } from '../UI/Chip';
+import { Button } from '../UI/Button';
 
 export const TokenInput = forwardRef(function ({ initialTokens }: TODO, ref: TODO) {
   const [tokens, setTokens] = useState<string[]>(initialTokens || []);
@@ -48,21 +50,13 @@ export const TokenInput = forwardRef(function ({ initialTokens }: TODO, ref: TOD
           Add
         </Button>
       </div>
-      <div className='flex gap-2 w-full'>
+      <div className='flex gap-2 w-full flex-wrap'>
         {tokens.map(token => (
           <Chip
             onClick={() => setSelectedToken(token)}
-            label={token}
-            deleteIcon={<Cancel sx={{ color: 'white' }} />}
-            onDelete={() => deleteToken(token)}
-            sx={{
-              color: 'white',
-              backgroundColor: blue[500],
-              '& .MuiChip-deleteIcon': {
-                color: 'white', // Ensure the delete icon is styled correctly
-              },
-            }}
-          />
+            onDelete={() => deleteToken(token)}>
+            {token}
+          </Chip>
         ))}
       </div>
     </form>
