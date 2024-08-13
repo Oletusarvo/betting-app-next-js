@@ -108,6 +108,19 @@ export class Game extends AppObject<GameType> {
     return 0;
   }
 
+  private getTaxedPool() {
+    return Math.round(this.m_pool * 0.7);
+  }
+
+  private getTotalTax(taxedPool: number) {
+    const taxPercentage = (this.data.tax || 0) / 100;
+    return Math.round(taxedPool * taxPercentage);
+  }
+
+  private getPoolRemainder(totalTax: number, numBeneficiaries: number) {
+    return (this.m_pool - totalTax) % numBeneficiaries;
+  }
+
   public close(positionId: string):
     | {
         errcode: 0;
@@ -118,7 +131,6 @@ export class Game extends AppObject<GameType> {
     | {
         errcode: GameError.CONTESTED;
       } {
-    const game = this.data;
     const bids = this.m_bids;
 
     //Make sure all bids equal the minimum bid
@@ -130,14 +142,14 @@ export class Game extends AppObject<GameType> {
 
     const bidValues = Array.from(bids.values());
     const winners = bidValues.filter(bid => bid.data.positionId == positionId);
-    const taxedPool = Math.round(this.m_pool * 0.7);
+    const taxedPool = this.getTaxedPool();
 
     //The tax data of a game is always an integer between 0 or 100. Thus it shall be divided by 100 when calculating the tax.
-    const tax = Math.round(taxedPool * ((game.tax || 0) / 100));
+    const tax = this.getTotalTax(taxedPool);
 
     const numBeneficiaries = winners.length || this.m_bids.size || 1;
 
-    const remainder = (this.m_pool - tax) % numBeneficiaries;
+    const remainder = this.getPoolRemainder(tax, numBeneficiaries);
     const finalPool = this.m_pool - tax - remainder;
     const winnerShare = Math.floor(finalPool / numBeneficiaries);
     const creatorShare = tax + remainder;
@@ -148,6 +160,7 @@ export class Game extends AppObject<GameType> {
       creatorShare,
       winners:
         (winners.length && winners.map(bid => bid.data)) ||
+        //No winners. Every participants bid will be returned back.
         Array.from(this.m_bids.values()).map(bid => bid.data),
     };
   }

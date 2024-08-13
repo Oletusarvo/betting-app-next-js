@@ -8,6 +8,30 @@ export class Bank {
     return trx || db;
   }
 
+  public static async deposit(walletId: string, amount: number, trx?: Knex.Transaction) {
+    const con = this.initConnection(trx);
+    const [wallet] = await con('data_wallets')
+      .where({ id: walletId })
+      .select('balance', 'currencyId');
+
+    const balanceBeforeDeposit = wallet.balance;
+    const balanceAfterDeposit = wallet.balance + amount;
+
+    if (balanceBeforeDeposit < 0) {
+      const amountToPutInReserve =
+        balanceAfterDeposit < 0
+          ? balanceAfterDeposit - balanceBeforeDeposit
+          : Math.abs(balanceBeforeDeposit);
+
+      await Bank.putInReserve(wallet.currencyId, amountToPutInReserve, trx);
+    }
+
+    await con('data_wallets').where({ id: walletId }).update({
+      balance: balanceAfterDeposit,
+    });
+  }
+
+  /**Mints new currency and increases its circulation. */
   private static async mintCurrency(id: string, amount: number, trx?: Knex.Transaction) {
     const con = this.initConnection(trx);
     await con(Bank.table).where({ id }).increment('inCirculation', amount);

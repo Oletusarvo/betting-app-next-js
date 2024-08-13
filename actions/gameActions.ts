@@ -144,28 +144,13 @@ export async function ACloseGame(gameId: string, positionId: string) {
 
     //Imburse the winners:
     const imbursePromises = result.winners.map(async winner => {
-      const wallet = await Wallet.loadWallet(winner.userId, game.data.currencyId, trx);
-      const balanceBeforeDeposit = wallet.data.balance;
-      wallet.deposit(result.winnerShare);
-
-      if (balanceBeforeDeposit < 0) {
-        const amountToPutInReserve =
-          wallet.data.balance < 0
-            ? wallet.data.balance - balanceBeforeDeposit
-            : Math.abs(balanceBeforeDeposit);
-
-        await Bank.putInReserve(game.data.currencyId, amountToPutInReserve, trx);
-      }
-
-      await Wallet.saveWallet(wallet, trx);
+      const [walletId] = await trx('data_wallets').where({ userId: winner.userId }).pluck('id');
+      const amount =
+        result.winnerShare + (winner.userId == game.data.authorId ? result.creatorShare : 0);
+      return Bank.deposit(walletId, amount, trx);
     });
 
     await Promise.all(imbursePromises);
-
-    //Add the creator share to the creator of the bid.
-    const creatorWallet = await Wallet.loadWallet(game.data.authorId, game.data.currencyId, trx);
-    creatorWallet.deposit(result.creatorShare);
-    await Wallet.saveWallet(creatorWallet, trx);
 
     //Delete the game.
     await trx('data_games').where({ id: game.id }).del();
