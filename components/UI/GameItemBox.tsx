@@ -16,6 +16,7 @@ import { IconButtonLink } from '../Feature/IconButtonLink';
 import { CurrencySymbolContainer } from './CurrencySymbolContainer';
 import { isExpired } from '@/utils/isExpired';
 import { socket } from 'app/socket.mjs';
+import toast from 'react-hot-toast';
 
 export type GameItemBoxProps = {
   game: GameType;
@@ -75,7 +76,7 @@ export function GameItemBox({
   useEffect(() => {
     socket.on('game_update', updatedGame => {
       if (updatedGame.id !== game.id) return;
-      setGameState(updatedGame);
+      toast.success('game updated!');
     });
 
     return () => {

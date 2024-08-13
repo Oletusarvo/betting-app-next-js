@@ -90,9 +90,7 @@ export const Fieldset = ({
     <fieldset
       {...props}
       className='border-[2px] border-slate-200 rounded-lg flex flex-col bg-white relative overflow-hidden'>
-      <div className='w-full font-bold px-2 uppercase py-4 mb-4 bg-darkGrey text-white text-sm'>
-        {legend}
-      </div>
+      <legend className='px-2 font-semibold text-lg'>{legend}</legend>
       <div className='flex flex-col gap-4 p-2'>{children}</div>
     </fieldset>
   );

@@ -38,7 +38,7 @@ export function CreateDataForm<T>({ children, createMethod, initialData }: Creat
   const loading = status == SubmitStatus.LOADING;
   return (
     <form
-      className='flex flex-col w-full'
+      className='flex flex-col w-full gap-2'
       onSubmit={submit}
       onChange={updateData}>
       {children}

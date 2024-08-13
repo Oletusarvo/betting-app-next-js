@@ -116,7 +116,7 @@ export async function APlaceBid(newBid: { gameId: string; positionId: string; am
     await Game.saveGame(game, trx);
     await trx.commit();
     revalidatePath('/dashboard');
-    //getIo().emit('game_updated', JSON.stringify(game.data));
+    getIo().emit('game_updated', JSON.stringify(game.data));
 
     return 0;
   } catch (err: any) {
