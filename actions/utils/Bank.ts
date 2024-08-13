@@ -8,6 +8,7 @@ export class Bank {
     return trx || db;
   }
 
+  /**Deposits the correct currency to the provided wallet id. Also updates the reserve of the currency if the balance of the wallet is negative. */
   public static async deposit(walletId: string, amount: number, trx?: Knex.Transaction) {
     const con = this.initConnection(trx);
     const [wallet] = await con('data_wallets')

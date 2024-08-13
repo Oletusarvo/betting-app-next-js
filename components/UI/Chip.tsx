@@ -10,7 +10,17 @@ type ChipProps = React.PropsWithChildren & {
 export function Chip({ children, onDelete, onClick, color = 'primary' }: ChipProps) {
   const classes = [
     'flex items-center justify-center px-4 py-2 text-white font-semibold rounded-3xl gap-2',
-    'bg-' + color,
+    color == 'primary'
+      ? 'bg-primary'
+      : color == 'secondary'
+      ? 'bg-secondary'
+      : color == 'warning'
+      ? 'bg-warning'
+      : color == 'call'
+      ? 'bg-call'
+      : color == 'folded'
+      ? 'bg-folded'
+      : 'bg-success',
   ];
 
   return (

@@ -26,11 +26,19 @@ export function Button({
 }: ButtonProps) {
   const router = useRouter();
   const icon = (loading && <Spinner />) || (startIcon as ReactElement);
+  const bgColor =
+    color == 'primary'
+      ? 'bg-primary'
+      : color == 'secondary'
+      ? 'bg-secondary'
+      : color == 'success'
+      ? 'bg-success'
+      : 'bg-warning';
 
   const classes = [
     'py-2 px-4 flex items-center gap-2 rounded-[3px] tracking-wider justify-center uppercase font-semibold text-sm',
     variant == 'contained'
-      ? `bg-${color} text-white shadow-md`
+      ? `${bgColor} text-white shadow-md`
       : variant == 'outlined'
       ? `border border-${color} text-${color}`
       : `bg-none text-${color}`,

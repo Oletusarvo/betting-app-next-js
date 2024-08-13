@@ -37,12 +37,7 @@ export default async function GamesPage({ searchParams }: TODO) {
       <div className='flex flex-col gap-1 flex-1'>
         <List
           data={games}
-          onEmptyElement={
-            <TypeText
-              text='No bets yet.'
-              cursor={<Blinker speed={200}>_</Blinker>}
-            />
-          }
+          onEmptyElement={<TypeText text='No bets yet.' />}
           ListItemComponent={async ({ item }) => {
             const [[{ pool }], [currencySymbol], [bid]] = (await Promise.all([
               db('data_bids').where({ gameId: item.id }).sum('amount', { as: 'pool' }),

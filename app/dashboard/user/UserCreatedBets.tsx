@@ -1,4 +1,6 @@
+import { Blinker } from '@/components/Feature/Blinker';
 import { List } from '@/components/Feature/List';
+import { TypeText } from '@/components/Feature/TypeText';
 import { GameItemBox } from '@/components/UI/GameItemBox';
 import { GameType } from '@/utils/classes/Game';
 import { getBidStatus } from '@/utils/getBidStatus';
@@ -12,6 +14,11 @@ export async function UserCreatedBets() {
   return (
     <List
       data={bets}
+      onEmptyElement={
+        <span className='text-sm text-slate-500'>
+          <TypeText text='No bets created yet.' />
+        </span>
+      }
       ListItemComponent={async ({ item }) => {
         const [{ pool }] = await db('data_bids')
           .where({ gameId: item.id })
