@@ -12,6 +12,7 @@ export default async function CloseGamePage({ params }: TODO) {
     .select('title', 'description');
   const options = await db('data_gamePositions').where({ gameId });
 
+  console.log(title, description);
   return (
     <Main>
       <Heading>

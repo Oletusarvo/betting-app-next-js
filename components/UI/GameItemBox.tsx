@@ -1,4 +1,6 @@
-import { ReactNode } from 'react';
+'use client';
+
+import { ReactNode, useEffect, useState } from 'react';
 import { ItemBox } from './ItemBox';
 import { IconButton, MenuItem } from '@mui/material';
 import { MoreHoriz, MoreVert } from '@mui/icons-material';
@@ -13,6 +15,7 @@ import { BidType } from '@/utils/classes/Bid';
 import { IconButtonLink } from '../Feature/IconButtonLink';
 import { CurrencySymbolContainer } from './CurrencySymbolContainer';
 import { isExpired } from '@/utils/isExpired';
+import { socket } from 'app/socket.mjs';
 
 export type GameItemBoxProps = {
   game: GameType;
@@ -61,8 +64,24 @@ export function GameItemBox({
   status,
   withControls,
 }: GameItemBoxProps) {
-  const { title, description, id } = game;
+  const [gameState, setGameState] = useState({
+    ...game,
+    pool,
+  });
+
+  const { title, description, id } = gameState;
   const expired = isExpired(game.expiresAt);
+
+  useEffect(() => {
+    socket.on('game_update', updatedGame => {
+      if (updatedGame.id !== game.id) return;
+      setGameState(updatedGame);
+    });
+
+    return () => {
+      socket.off('game_update');
+    };
+  }, []);
 
   return (
     <ItemBox>
