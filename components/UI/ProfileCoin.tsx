@@ -9,7 +9,7 @@ export function ProfileCoin({
   ...props
 }: ProfileCoinProps) {
   const classes = [
-    'w-[70px] flex items-center justify-center aspect-square rounded-full bg-blue-500 shadow-md font-semibold',
+    'w-[50px] flex items-center justify-center aspect-square rounded-full bg-blue-500 shadow-md font-semibold',
     className,
   ];
   return (

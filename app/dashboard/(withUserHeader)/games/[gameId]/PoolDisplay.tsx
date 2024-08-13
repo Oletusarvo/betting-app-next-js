@@ -5,7 +5,7 @@ import { Divider } from '@mui/material';
 import { useGameContext } from './GameContext';
 import { CSSProperties, useEffect } from 'react';
 import { blue, green, red, yellow } from '@mui/material/colors';
-import { socket } from '../../../socket.mjs';
+import { socket } from '../../../../socket.mjs';
 
 export function PoolDisplay() {
   const {

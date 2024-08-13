@@ -31,7 +31,7 @@ export default async function GamesPage({ searchParams }: TODO) {
       <AddButtonWithSearchBar
         searchPlaceholder='Search for games...'
         queryName='q'
-        addUrl='/dashboard/games/create'
+        addUrl='/dashboard/createGame'
       />
 
       <div className='flex flex-col gap-1 flex-1'>

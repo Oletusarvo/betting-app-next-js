@@ -2,7 +2,7 @@ import { loadSession } from '@/utils/loadSession';
 import { blue } from '@mui/material/colors';
 import { CSSProperties } from 'react';
 import db from 'dbconfig';
-import { BottomNav } from './BottomNav';
+import { BottomNav } from '../BottomNav';
 import { TopLabel } from '@/components/UI/TopLabel';
 import { ProfileCoin } from '@/components/UI/ProfileCoin';
 import { Menu } from '@/components/Feature/Menu';

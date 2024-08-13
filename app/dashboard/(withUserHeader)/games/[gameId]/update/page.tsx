@@ -1,7 +1,7 @@
 import { Main } from '@/components/UI/Main';
 import { loadSession } from '@/utils/loadSession';
 import db from 'dbconfig';
-import { GameForm } from '../../GameForm';
+import { GameForm } from '../../../../createGame/GameForm';
 
 export default async function UpdateGamePage({ params }: TODO) {
   const session = await loadSession();

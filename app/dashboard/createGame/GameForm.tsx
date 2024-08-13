@@ -18,7 +18,7 @@ import { ACreateGame, AUpdateGame } from 'actions/gameActions';
 import { useRouter } from 'next/navigation';
 import { createContext, useRef } from 'react';
 import toast from 'react-hot-toast';
-import { GamePositionsInput } from './create/GamePositionsInput';
+import { GamePositionsInput } from './GamePositionsInput';
 
 type GameFormProps = {
   game?: GameType;
