@@ -82,6 +82,12 @@ export class Game extends AppObject<GameType> {
 
   public placeBid(newBid: { amount: number; userId: string }) {
     const game = this.m_data;
+
+    const currentTime = Date.now();
+    if (this.data.expiresAt && currentTime >= parseInt(this.data.expiresAt)) {
+      return GameError.EXPIRED;
+    }
+
     const bids = this.m_bids;
 
     const previousBid = bids.get(newBid.userId);

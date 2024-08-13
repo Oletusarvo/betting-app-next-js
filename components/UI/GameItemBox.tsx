@@ -12,13 +12,14 @@ import { GameType } from '@/utils/classes/Game';
 import { BidType } from '@/utils/classes/Bid';
 import { IconButtonLink } from '../Feature/IconButtonLink';
 import { CurrencySymbolContainer } from './CurrencySymbolContainer';
+import { isExpired } from '@/utils/isExpired';
 
 export type GameItemBoxProps = {
   game: GameType;
   userBid?: BidType;
   pool?: number;
   currencySymbol?: string;
-  status: 'must_call' | 'meets_bid' | 'no_bid' | 'at_max_bid' | 'folded';
+  status: 'must_call' | 'meets_bid' | 'no_bid' | 'at_max_bid' | 'folded' | 'expired';
   withControls?: boolean;
 };
 
@@ -32,6 +33,8 @@ export function StatusBadge({ status }: { status: GameItemBoxProps['status'] }) 
           ? 'primary'
           : status == 'folded'
           ? 'folded'
+          : status == 'expired'
+          ? 'warning'
           : 'secondary'
       }>
       {status == 'no_bid'
@@ -40,7 +43,9 @@ export function StatusBadge({ status }: { status: GameItemBoxProps['status'] }) 
         ? 'Folded'
         : status == 'must_call'
         ? 'Must Call'
-        : 'OK'}
+        : status == 'expired'
+        ? 'Expired'
+        : 'Ok'}
     </Chip>
   );
 }
@@ -57,6 +62,8 @@ export function GameItemBox({
   withControls,
 }: GameItemBoxProps) {
   const { title, description, id } = game;
+  const expired = isExpired(game.expiresAt);
+
   return (
     <ItemBox>
       <ItemBox.Header>
@@ -74,7 +81,7 @@ export function GameItemBox({
           </Link>
         </div>
 
-        <StatusBadge status={status} />
+        <StatusBadge status={expired ? 'expired' : status} />
       </ItemBox.Header>
 
       <ItemBox.Body>
