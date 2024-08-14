@@ -3,14 +3,9 @@
 import { Game, GameType } from '@/utils/classes/Game';
 import db from 'dbconfig';
 import { revalidatePath } from 'next/cache';
-import { transaction } from 'transaction';
 
 import { loadSession } from '@/utils/loadSession';
-import { BidType } from '@/utils/classes/Bid';
-import { multiplyPropertiesBy } from './utils/functions/multiplyPropertiesBy';
 import { GameError } from '@/utils/classes/enums/GameError';
-import { Wallet } from '@/utils/classes/Wallet';
-import { getIo } from 'createIo.mjs';
 import { Bank } from './utils/Bank';
 
 export async function AGetGames(query: TODO) {
@@ -114,9 +109,9 @@ export async function APlaceBid(newBid: { gameId: string; positionId: string; am
       .decrement('balance', newBid.amount);
 
     await Game.saveGame(game, trx);
+    //socketServer.getIo().emit('game_updated', JSON.stringify(game.data));
     await trx.commit();
     revalidatePath('/dashboard');
-    getIo().emit('game_updated', JSON.stringify(game.data));
 
     return 0;
   } catch (err: any) {

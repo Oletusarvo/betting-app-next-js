@@ -1,7 +1,6 @@
-import { createServer } from 'node:http';
-import next from 'next';
-import { Server } from 'socket.io';
-import { initIo } from './createIo.mjs';
+const next = require('next');
+const socketServer = require('./SocketServer.js');
+const { createServer } = require('node:http');
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -13,7 +12,7 @@ const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
   const httpServer = createServer(handler);
-  initIo(httpServer);
+  socketServer.config(httpServer);
 
   httpServer
     .once('error', err => {

@@ -37,10 +37,7 @@
     ".next/types/**/*.ts",
     "knexfile.js",
     "app/api/auth/[...nextauth]/route.js",
-    "app/api/auth/[...nextauth]/options.js",
-    "server.js",
-    "server.mjs",
-    "createIo.mjs"
+    "app/api/auth/[...nextauth]/options.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "server.js", "SocketServer.js"]
 }

@@ -1,9 +1,5 @@
-const withPWA = require('next-pwa')({
-  dest: 'public',
-});
-
-module.exports = withPWA({
+module.exports = {
   experimental: {
     serverComponentsExternalPackages: ['knex'],
   },
-});
+};

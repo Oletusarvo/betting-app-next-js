@@ -1,9 +1,0 @@
-{
-  "name": "Wager Wave",
-  "short_name": "WW",
-  "description": "An app for creating bets and bidding on them with custom currencies.",
-  "start_url": "/",
-  "display": "standalone",
-  "theme_color": "blue",
-  "background_color": "#0000"
-}

@@ -49,7 +49,7 @@ export function StatusBadge({ status }: { status: GameItemBoxProps['status'] }) 
         ? 'Must Call'
         : status == 'expired'
         ? 'Expired'
-        : 'Ok'}
+        : 'Bid'}
     </Chip>
   );
 }
