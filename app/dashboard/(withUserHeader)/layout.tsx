@@ -20,7 +20,7 @@ export default async function DashboardLayout({ children }: TODO) {
 
   return (
     <div
-      className='flex-1 bg-slate-100 text-slate-600 h-full flex flex-col'
+      className='flex-1 bg-gradient-to-b from-white to-slate-200 text-slate-600 h-full flex flex-col'
       id='dashboard-layout'>
       <DashboardHeader
         wallet={wallet}

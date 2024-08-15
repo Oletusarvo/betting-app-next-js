@@ -1,11 +1,11 @@
 import { useInputData } from '@/hooks/useInputData';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { Input } from '../UI/FormUtils';
 
 import { Cancel, Close, Delete, HighlightOff } from '@mui/icons-material';
 import { blue } from '@mui/material/colors';
 import { Chip } from '../UI/Chip';
 import { Button } from '../UI/Button';
+import { Input } from '../UI/Input';
 
 export const TokenInput = forwardRef(function ({ initialTokens }: TODO, ref: TODO) {
   const [tokens, setTokens] = useState<string[]>(initialTokens || []);

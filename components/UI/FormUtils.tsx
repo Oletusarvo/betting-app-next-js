@@ -6,7 +6,7 @@ export const Group = ({ children }: React.PropsWithChildren) => {
 };
 
 export const Label = ({ children }: React.PropsWithChildren) => {
-  return <label className='text-base font-semibold'>{children}</label>;
+  return <label className='text-sm uppercase font-semibold text-slate-600'>{children}</label>;
 };
 
 export const Input = forwardRef((props: React.ComponentProps<'input'>, ref: TODO) => {
@@ -89,7 +89,7 @@ export const Fieldset = ({
   return (
     <fieldset
       {...props}
-      className='border-[2px] border-slate-200 rounded-lg flex flex-col bg-white relative overflow-hidden'>
+      className='border-[2px] border-slate-200 rounded-lg flex flex-col relative overflow-hidden'>
       <legend className='px-2 font-semibold text-lg'>{legend}</legend>
       <div className='flex flex-col gap-4 p-2'>{children}</div>
     </fieldset>

@@ -1,6 +1,6 @@
 import { SearchBar } from './SearchBar';
 import { Add } from '@mui/icons-material';
-import Link from 'next/link';
+
 import { Button } from '../UI/Button';
 
 type AddButtonWithSearchBarProps = {
@@ -20,14 +20,14 @@ export function AddButtonWithSearchBar({
         queryName={queryName}
         placeholder={searchPlaceholder}
       />
-      <Link href={addUrl}>
-        <Button
-          type='button'
-          variant='contained'
-          startIcon={<Add />}>
-          Add
-        </Button>
-      </Link>
+
+      <Button
+        href={addUrl}
+        type='button'
+        variant='contained'
+        startIcon={<Add />}>
+        Add
+      </Button>
     </div>
   );
 }

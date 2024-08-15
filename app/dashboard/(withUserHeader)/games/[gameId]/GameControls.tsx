@@ -110,6 +110,7 @@ export function GameControls() {
             placeholder='Type bid amount...'
             step={minRaise || 1}
             min={minBidAmount}
+            max={maxRaise && minBidAmount + maxRaise}
             defaultValue={minBidAmount}
           />
           <div className='flex gap-2 w-full'>

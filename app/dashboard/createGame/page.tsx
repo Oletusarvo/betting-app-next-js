@@ -7,7 +7,7 @@ import { BackButton } from '@/components/UI/BackButton';
 
 export default async function AddGamePage() {
   return (
-    <main className='flex flex-col gap-2 p-1'>
+    <main className='flex bg-gradient-to-b from-white to-slate-200 flex-col gap-2 p-1'>
       <div className='flex gap-4 w-full items-center'>
         <BackButton />
 
