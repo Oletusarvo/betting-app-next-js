@@ -18,6 +18,7 @@ import { isExpired } from '@/utils/isExpired';
 import { socket } from 'app/socket.mjs';
 import toast from 'react-hot-toast';
 import { getBidStatus } from '@/utils/getBidStatus';
+import { useGameUpdates } from '@/hooks/useGameUpdates';
 
 export type GameItemBoxProps = {
   game: GameType;
@@ -63,12 +64,7 @@ export function GameItemBox({
   status,
   withControls,
 }: GameItemBoxProps) {
-  const [gameState, setGameState] = useState({
-    ...game,
-    pool,
-  });
-
-  const [gameStatus, setGameStatus] = useState(status);
+  const { currentGameState, currentBidStatus } = useGameUpdates({ ...game, pool }, userBid);
   const {
     title,
     description,
@@ -79,24 +75,9 @@ export function GameItemBox({
     minBid,
     maxBid,
     maxRaise,
-  } = gameState;
+  } = currentGameState;
 
   const expired = isExpired(game.expiresAt);
-
-  useEffect(() => {
-    socket.on('game_update', updatedGame => {
-      if (updatedGame.id != game.id) return;
-
-      setGameState(() => updatedGame);
-      console.log(updatedGame);
-      setGameStatus(() => getBidStatus(userBid, updatedGame));
-      toast.success('game updated!');
-    });
-
-    return () => {
-      socket.off('game_update');
-    };
-  }, []);
 
   return (
     <ItemBox>
@@ -115,7 +96,7 @@ export function GameItemBox({
           </Link>
         </div>
 
-        <StatusBadge status={expired ? 'expired' : gameStatus} />
+        <StatusBadge status={expired ? 'expired' : currentBidStatus} />
       </ItemBox.Header>
 
       <ItemBox.Body>

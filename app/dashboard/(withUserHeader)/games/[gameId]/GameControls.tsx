@@ -11,6 +11,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { GameError } from '@/utils/classes/enums/GameError';
 import { BidType } from '@/utils/classes/Bid';
+import { socket } from 'app/socket.mjs';
 
 export function GameControls() {
   const [status, setStatus] = useState(0);

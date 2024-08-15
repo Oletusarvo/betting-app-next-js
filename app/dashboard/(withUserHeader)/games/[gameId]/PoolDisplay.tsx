@@ -8,7 +8,6 @@ export function PoolDisplay() {
     game: { pool },
     gameCurrency: currencySymbol,
     bidStatus,
-    userBid,
   } = useGameContext();
 
   const ringClassName = [

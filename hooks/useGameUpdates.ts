@@ -1,0 +1,47 @@
+'use client';
+
+import { GameItemBoxProps } from '@/components/UI/GameItemBox';
+import { BidType } from '@/utils/classes/Bid';
+import { GameType } from '@/utils/classes/Game';
+import { getBidStatus } from '@/utils/getBidStatus';
+import { socket } from 'app/socket.mjs';
+import { useEffect, useState } from 'react';
+
+export function useGameUpdates(
+  initialGameState: GameType & { pool?: number },
+  initialUserBid?: BidType
+) {
+  const [currentGameState, setCurrentGameState] = useState(initialGameState);
+  const [currentBidStatus, setCurrentBidStatus] = useState<GameItemBoxProps['status']>(() => {
+    return getBidStatus(initialUserBid, initialGameState);
+  });
+
+  useEffect(() => {
+    socket.emit('join_room', initialGameState.id);
+    socket.on('game_update', updatedGame => {
+      if (updatedGame.id != currentGameState.id) return;
+
+      setCurrentGameState(() => updatedGame);
+      setCurrentBidStatus(() => getBidStatus(initialUserBid, updatedGame));
+      console.log(currentBidStatus);
+    });
+
+    return () => {
+      socket.off('game_update');
+      socket.emit('leave_room', initialGameState.id);
+    };
+  }, []);
+
+  useEffect(() => {
+    setCurrentGameState(initialGameState);
+  }, [initialGameState]);
+
+  useEffect(() => {
+    setCurrentBidStatus(getBidStatus(initialUserBid, currentGameState));
+  }, [initialUserBid]);
+
+  return {
+    currentGameState,
+    currentBidStatus,
+  };
+}

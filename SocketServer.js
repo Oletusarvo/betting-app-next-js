@@ -18,6 +18,14 @@ class SocketServer {
           this.connectedSockets.delete(socket);
           console.log(socket.id + ' disconnected.');
         });
+
+        socket.on('join_room', gameId => {
+          socket.join(`gameroom-${gameId}`);
+        });
+
+        socket.on('leave_room', gameId => {
+          socket.leave(`gameroom-${gameId}`);
+        });
       });
 
       this.io.on('disconnect', socket => console.log(socket.id + ' disconnected.'));

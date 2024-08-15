@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { loadSession } from '@/utils/loadSession';
 import { GameError } from '@/utils/classes/enums/GameError';
 import { Bank } from './utils/Bank';
+import { Socket } from 'socket.io-client';
 
 export async function AGetGames(query: TODO) {
   return db('data_games').where(query);
@@ -80,6 +81,13 @@ export async function AUpdateGame(id: string, data: TODO) {
 export async function APlaceBid(newBid: { gameId: string; positionId: string; amount: number }) {
   const trx = await db.transaction();
 
+  const emitGameUpdate = (game: Game, pool: number) => {
+    (global as any).io.to(`gameroom-${game.data.id}`).emit('game_update', {
+      ...game.data,
+      pool,
+    });
+  };
+
   try {
     //Load the current session, to gain access to the user's id.
     const session = await loadSession();
@@ -99,14 +107,9 @@ export async function APlaceBid(newBid: { gameId: string; positionId: string; am
     await Game.saveGame(game, trx);
 
     await trx.commit();
+    revalidatePath('/dashboard/games/[gameId]', 'page');
 
-    (global as any).io.emit('game_update', {
-      ...game.data,
-      pool: game.pool,
-      minBid: game.data.minBid,
-    });
-
-    revalidatePath('/dashboard');
+    emitGameUpdate(game, game.pool);
 
     return 0;
   } catch (err: any) {

@@ -1,6 +1,7 @@
 'use client';
 
 import { GameItemBoxProps } from '@/components/UI/GameItemBox';
+import { useGameUpdates } from '@/hooks/useGameUpdates';
 import { BidType } from '@/utils/classes/Bid';
 import { GameType } from '@/utils/classes/Game';
 import { createUseContextHook } from '@/utils/createUseContextHook';
@@ -14,12 +15,12 @@ export type GameProviderProps = {
   };
   gameCurrency: string;
   gamePositions: { id: string; value: string; weight: number }[];
-
   userBid?: BidType;
-  bidStatus: GameItemBoxProps['status'];
 };
 
-const GameContext = createContext<GameProviderProps | null>(null);
+const GameContext = createContext<
+  (GameProviderProps & { bidStatus: GameItemBoxProps['status'] }) | null
+>(null);
 
 export const GameProvider = ({
   children,
@@ -29,19 +30,7 @@ export const GameProvider = ({
   userBid,
   ...props
 }: GameProviderProps & React.PropsWithChildren) => {
-  const [currentGameState, setCurrentGameState] = useState(game);
-  const [currentBidStatus, setCurrentBidStatus] = useState<GameItemBoxProps['status']>(() => {
-    return (userBid && getBidStatus(userBid, game)) || 'no_bid';
-  });
-
-  useEffect(() => {
-    socket.on('game_update', updatedGame => {
-      if (updatedGame.id != currentGameState.id) return;
-
-      setCurrentGameState(() => updatedGame);
-      setCurrentBidStatus(() => getBidStatus(userBid, currentGameState));
-    });
-  }, []);
+  const { currentGameState, currentBidStatus } = useGameUpdates(game, userBid);
 
   return (
     <GameContext.Provider

@@ -35,15 +35,13 @@ export default async function GamePage({ params }: TODO) {
     userId: session.user.id,
   })) as [BidType | undefined];
 
-  const bidStatus = getBidStatus(userBid, game);
-
+  console.log(userBid);
   return (
     <GameProvider
       game={{ ...game, pool }}
       gamePositions={positions}
       gameCurrency={currencySymbol}
-      userBid={userBid}
-      bidStatus={bidStatus}>
+      userBid={userBid}>
       <Main>
         <GameInfo />
         <PoolDisplay />
