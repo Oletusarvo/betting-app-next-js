@@ -91,26 +91,21 @@ export async function APlaceBid(newBid: { gameId: string; positionId: string; am
     });
     if (result != 0) throw result;
 
-    const [currentBalance] = await trx('data_wallets')
+    const [walletId] = await trx('data_wallets')
       .where({ currencyId: game.data.currencyId, userId: session.user.id })
-      .pluck('balance');
+      .pluck('id');
 
-    if (currentBalance <= 0) {
-      await Bank.pullFromReserve(game.data.currencyId, newBid.amount, trx);
-    } else {
-      const balanceDiff = currentBalance - newBid.amount;
-      if (balanceDiff < 0) {
-        await Bank.pullFromReserve(game.data.currencyId, -balanceDiff, trx);
-      }
-    }
-
-    await trx('data_wallets')
-      .where({ userId: session.user.id, currencyId: game.data.currencyId })
-      .decrement('balance', newBid.amount);
-
+    await Bank.withdraw(walletId, newBid.amount, trx);
     await Game.saveGame(game, trx);
-    //socketServer.getIo().emit('game_updated', JSON.stringify(game.data));
+
     await trx.commit();
+
+    (global as any).io.emit('game_update', {
+      ...game.data,
+      pool: game.pool,
+      minBid: game.data.minBid,
+    });
+
     revalidatePath('/dashboard');
 
     return 0;

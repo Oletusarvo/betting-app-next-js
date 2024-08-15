@@ -16,7 +16,9 @@ export function GameControls() {
   const [status, setStatus] = useState(0);
 
   const {
-    game: { currencySymbol, pool, minBid, maxBid, maxRaise, positions, minRaise, id: gameId },
+    game: { pool, minBid, maxBid, maxRaise, minRaise, id: gameId },
+    gameCurrency: currencySymbol,
+    gamePositions: positions,
     userBid,
     bidStatus,
   } = useGameContext();
@@ -105,7 +107,7 @@ export function GameControls() {
             name='amount'
             type='number'
             placeholder='Type bid amount...'
-            step={1}
+            step={minRaise || 1}
             min={minBidAmount}
             defaultValue={minBidAmount}
           />

@@ -8,8 +8,39 @@ export class Bank {
     return trx || db;
   }
 
+  /**Withdraws currency from the provided wallet id. Automatically loans from the currency reserve and mints more currency if necessary. */
+  public static async withdraw(walletId: string, amount: number, trx?: Knex.Transaction) {
+    if (amount < 0) {
+      throw new Error('Only positive amounts can be withdrawn!');
+    }
+
+    const con = this.initConnection(trx);
+    const [wallet] = await con('data_wallets')
+      .where({ id: walletId })
+      .select('balance', 'currencyId');
+
+    const balanceBeforeWithdraw = wallet.balance;
+    const balanceAfterWithdraw = wallet.balance - amount;
+
+    if (balanceBeforeWithdraw <= 0) {
+      //Straightforward loan
+      await this.pullFromReserve(wallet.currencyId, amount, trx);
+    } else if (balanceAfterWithdraw < 0) {
+      //Partial loan
+      await this.pullFromReserve(wallet.currencyId, Math.abs(balanceAfterWithdraw), trx);
+    }
+
+    await con('data_wallets').where({ id: walletId }).update({
+      balance: balanceAfterWithdraw,
+    });
+  }
+
   /**Deposits the correct currency to the provided wallet id. Also updates the reserve of the currency if the balance of the wallet is negative. */
   public static async deposit(walletId: string, amount: number, trx?: Knex.Transaction) {
+    if (amount < 0) {
+      throw new Error('Only positive amounts can be deposited!');
+    }
+
     const con = this.initConnection(trx);
     const [wallet] = await con('data_wallets')
       .where({ id: walletId })

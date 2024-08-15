@@ -8,11 +8,13 @@ const port = 3000;
 
 // when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port });
-const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
+  const handler = app.getRequestHandler();
   const httpServer = createServer(handler);
+
   socketServer.config(httpServer);
+  global.io = socketServer.getIo();
 
   httpServer
     .once('error', err => {

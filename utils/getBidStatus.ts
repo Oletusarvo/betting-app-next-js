@@ -1,7 +1,7 @@
 import { BidType } from './classes/Bid';
 import { GameType } from './classes/Game';
 
-export const getBidStatus = (bid: BidType, game: GameType) =>
+export const getBidStatus = (bid: BidType | undefined, game: GameType) =>
   (bid &&
     (bid.folded
       ? 'folded'

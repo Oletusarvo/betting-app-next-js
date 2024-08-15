@@ -17,6 +17,7 @@ import { CurrencySymbolContainer } from './CurrencySymbolContainer';
 import { isExpired } from '@/utils/isExpired';
 import { socket } from 'app/socket.mjs';
 import toast from 'react-hot-toast';
+import { getBidStatus } from '@/utils/getBidStatus';
 
 export type GameItemBoxProps = {
   game: GameType;
@@ -54,9 +55,6 @@ export function StatusBadge({ status }: { status: GameItemBoxProps['status'] }) 
   );
 }
 
-const DataContainer = ({ children }: TODO) => (
-  <div className='bg-slate-300 rounded-md text-white p-2 w-full'>{children}</div>
-);
 export function GameItemBox({
   game,
   userBid,
@@ -70,12 +68,28 @@ export function GameItemBox({
     pool,
   });
 
-  const { title, description, id } = gameState;
+  const [gameStatus, setGameStatus] = useState(status);
+  const {
+    title,
+    description,
+    id,
+    pool: currentPool,
+    tax,
+    minRaise,
+    minBid,
+    maxBid,
+    maxRaise,
+  } = gameState;
+
   const expired = isExpired(game.expiresAt);
 
   useEffect(() => {
     socket.on('game_update', updatedGame => {
-      if (updatedGame.id !== game.id) return;
+      if (updatedGame.id != game.id) return;
+
+      setGameState(() => updatedGame);
+      console.log(updatedGame);
+      setGameStatus(() => getBidStatus(userBid, updatedGame));
       toast.success('game updated!');
     });
 
@@ -101,7 +115,7 @@ export function GameItemBox({
           </Link>
         </div>
 
-        <StatusBadge status={expired ? 'expired' : status} />
+        <StatusBadge status={expired ? 'expired' : gameStatus} />
       </ItemBox.Header>
 
       <ItemBox.Body>
@@ -110,13 +124,13 @@ export function GameItemBox({
         <div className='flex items-center justify-between w-full mb-4'>
           <span className='font-semibold'>Pool</span>
           <span className='text-lg font-semibold'>
-            {(pool && pool.toLocaleString('en')) || 'No Bids'}
-            {pool && (
+            {(currentPool && currentPool.toLocaleString('en')) || 'No Bids'}
+            {currentPool && (
               <>
                 {currencySymbol}
-                {(game.tax && (
-                  <span className='text-sm text-warning'> (-{game.tax}% tax)</span>
-                )) || <span className='text-sm text-success'> (No tax)</span>}
+                {(tax && <span className='text-sm text-warning'> (-{tax}% tax)</span>) || (
+                  <span className='text-sm text-success'> (No tax)</span>
+                )}
               </>
             )}
           </span>
@@ -129,15 +143,15 @@ export function GameItemBox({
           <TopLabel
             labelPosition='left'
             labelText='Minimum'>
-            {game.minBid.toLocaleString('en')}
+            {minBid.toLocaleString('en')}
             <CurrencySymbolContainer>{currencySymbol}</CurrencySymbolContainer>
           </TopLabel>
 
           <TopLabel
             labelPosition='left'
             labelText='Raise'>
-            {(game.minRaise && game.minRaise.toLocaleString('en')) || 'No minimum'}
-            <CurrencySymbolContainer>{game.minRaise && currencySymbol}</CurrencySymbolContainer>
+            {(minRaise && minRaise.toLocaleString('en')) || 'No minimum'}
+            <CurrencySymbolContainer>{minRaise && currencySymbol}</CurrencySymbolContainer>
           </TopLabel>
         </div>
       </ItemBox.Body>

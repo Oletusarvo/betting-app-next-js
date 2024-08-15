@@ -11,6 +11,7 @@ import { GameInfo } from './GameInfo';
 import { BidType } from '@/utils/classes/Bid';
 import { divideAllNumbersBy } from 'actions/utils/functions/divideAllNumbersBy';
 import { GameType } from '@/utils/classes/Game';
+import { getBidStatus } from '@/utils/getBidStatus';
 
 export default async function GamePage({ params }: TODO) {
   const [game] = (await db('data_games').where({ id: params.gameId })) as [GameType | undefined];
@@ -33,20 +34,14 @@ export default async function GamePage({ params }: TODO) {
     gameId: params.gameId,
     userId: session.user.id,
   })) as [BidType | undefined];
-  const bidStatus =
-    (userBid &&
-      (userBid.folded
-        ? 'folded'
-        : userBid.amount < game.minBid
-        ? 'must_call'
-        : userBid.amount == game.maxBid
-        ? 'at_max_bid'
-        : 'meets_bid')) ||
-    'no_bid';
+
+  const bidStatus = getBidStatus(userBid, game);
 
   return (
     <GameProvider
-      game={{ ...game, positions, currencySymbol, pool }}
+      game={{ ...game, pool }}
+      gamePositions={positions}
+      gameCurrency={currencySymbol}
       userBid={userBid}
       bidStatus={bidStatus}>
       <Main>

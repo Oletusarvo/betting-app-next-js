@@ -80,6 +80,10 @@ export class Game extends AppObject<GameType> {
     return this.m_bids;
   }
 
+  public get pool() {
+    return Array.from(this.m_bids).reduce((acc, [key, bid]) => (acc += bid.amount), 0);
+  }
+
   public placeBid(newBid: { amount: number; userId: string }) {
     const game = this.m_data;
 

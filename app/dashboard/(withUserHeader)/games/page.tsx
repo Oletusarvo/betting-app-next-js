@@ -1,19 +1,12 @@
 import { AddButtonWithSearchBar } from '@/components/Feature/AddButtonWithSearchBar';
-import { Blinker } from '@/components/Feature/Blinker';
 import { List } from '@/components/Feature/List';
-import { SearchBar } from '@/components/Feature/SearchBar';
 import { TypeText } from '@/components/Feature/TypeText';
 import { GameItemBox } from '@/components/UI/GameItemBox';
-import { Heading } from '@/components/UI/Heading';
 import { Main } from '@/components/UI/Main';
-import { RoundedBox } from '@/components/UI/RoundedBox';
 import { BidType } from '@/utils/classes/Bid';
 import { getBidStatus } from '@/utils/getBidStatus';
 import { loadSession } from '@/utils/loadSession';
-import { Add } from '@mui/icons-material';
-import { Button } from '@mui/material';
 import db from 'dbconfig';
-import Link from 'next/link';
 
 export default async function GamesPage({ searchParams }: TODO) {
   const search = searchParams?.q;
@@ -21,7 +14,7 @@ export default async function GamesPage({ searchParams }: TODO) {
   const games = await db('data_games')
     .where(function () {
       const query = `%${search}%`;
-      this.whereLike('title', query).orWhereLike('description', query);
+      this.whereILike('title', query).orWhereILike('description', query);
     })
     .orderBy('createdAt', 'desc')
     .limit(10);

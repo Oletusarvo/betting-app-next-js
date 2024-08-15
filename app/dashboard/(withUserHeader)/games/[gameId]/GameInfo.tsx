@@ -10,13 +10,13 @@ import { BackButton } from './BackButton';
 import { ItemBox } from '@/components/UI/ItemBox';
 
 export function GameInfo() {
-  const { userBid, game, bidStatus } = useGameContext();
+  const { userBid, game, bidStatus, gameCurrency } = useGameContext();
 
   const getCurrencyValue = (value?: number, onUndefined?: number | string) => {
     if (value) {
-      return value.toLocaleString() + game.currencySymbol;
+      return value.toLocaleString() + gameCurrency;
     }
-    return onUndefined || 0 + game.currencySymbol;
+    return onUndefined || 0 + gameCurrency;
   };
 
   const DataRow = ({ label, value }: { label: string; value: string | number }) => (
