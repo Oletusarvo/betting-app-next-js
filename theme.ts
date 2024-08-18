@@ -1,8 +1,7 @@
 'use client';
 
 import { createTheme } from '@mui/material';
-import { blue, deepPurple, purple, teal } from '@mui/material/colors';
-
+import colors from './colors';
 declare module '@mui/material/styles' {
   interface Palette {
     primaryHighlight: Palette['primary'];
@@ -15,8 +14,10 @@ declare module '@mui/material/styles' {
 
 export const theme = createTheme({
   palette: {
-    primary: blue,
-    secondary: purple,
+    primary: {
+      main: colors.primary,
+    },
+    secondary: { main: colors.secondary },
     primaryHighlight: {
       main: '#FFDE82',
     },

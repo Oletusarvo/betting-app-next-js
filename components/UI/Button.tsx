@@ -50,6 +50,7 @@ export function Button({
     <button
       {...props}
       onClick={e => {
+        console.log(href);
         href && router.push(href);
         props.onClick && props.onClick(e);
       }}

@@ -1,23 +1,15 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
 import { ItemBox } from './ItemBox';
-import { IconButton, MenuItem } from '@mui/material';
-import { MoreHoriz, MoreVert } from '@mui/icons-material';
-import { DialogControl } from '../Feature/DialogControl';
+import { MoreVert } from '@mui/icons-material';
 import { Menu } from '../Feature/Menu';
-import { ProfileCoin } from './ProfileCoin';
 import Link from 'next/link';
 import { Chip } from './Chip';
 import { TopLabel } from './TopLabel';
 import { GameType } from '@/utils/classes/Game';
 import { BidType } from '@/utils/classes/Bid';
-import { IconButtonLink } from '../Feature/IconButtonLink';
 import { CurrencySymbolContainer } from './CurrencySymbolContainer';
 import { isExpired } from '@/utils/isExpired';
-import { socket } from 'app/socket.mjs';
-import toast from 'react-hot-toast';
-import { getBidStatus } from '@/utils/getBidStatus';
 import { useGameUpdates } from '@/hooks/useGameUpdates';
 
 export type GameItemBoxProps = {
@@ -25,7 +17,7 @@ export type GameItemBoxProps = {
   userBid?: BidType;
   pool?: number;
   currencySymbol?: string;
-  status: 'must_call' | 'meets_bid' | 'no_bid' | 'at_max_bid' | 'folded' | 'expired';
+  status?: 'must_call' | 'meets_bid' | 'no_bid' | 'at_max_bid' | 'folded' | 'expired';
   withControls?: boolean;
 };
 
@@ -61,9 +53,9 @@ export function GameItemBox({
   userBid,
   pool,
   currencySymbol,
-  status,
   withControls,
 }: GameItemBoxProps) {
+  console.log('Ryyppäks');
   const { currentGameState, currentBidStatus } = useGameUpdates({ ...game, pool }, userBid);
   const {
     title,

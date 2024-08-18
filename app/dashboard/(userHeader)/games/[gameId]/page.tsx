@@ -1,17 +1,13 @@
 import { Main } from '@/components/UI/Main';
-import { RoundedBox } from '@/components/UI/RoundedBox';
 import db from 'dbconfig';
 import { PoolDisplay } from './PoolDisplay';
 
-import { GameOverview } from './GameOverview';
 import { GameControls } from './GameControls';
 import { loadSession } from '@/utils/loadSession';
 import { GameProvider } from './GameContext';
 import { GameInfo } from './GameInfo';
 import { BidType } from '@/utils/classes/Bid';
-import { divideAllNumbersBy } from 'actions/utils/functions/divideAllNumbersBy';
 import { GameType } from '@/utils/classes/Game';
-import { getBidStatus } from '@/utils/getBidStatus';
 
 export default async function GamePage({ params }: TODO) {
   const [game] = (await db('data_games').where({ id: params.gameId })) as [GameType | undefined];
@@ -35,18 +31,15 @@ export default async function GamePage({ params }: TODO) {
     userId: session.user.id,
   })) as [BidType | undefined];
 
-  console.log(userBid);
   return (
     <GameProvider
       game={{ ...game, pool }}
       gamePositions={positions}
       gameCurrency={currencySymbol}
       userBid={userBid}>
-      <Main>
-        <GameInfo />
-        <PoolDisplay />
-        <GameControls />
-      </Main>
+      <GameInfo />
+      <PoolDisplay />
+      <GameControls />
     </GameProvider>
   );
 }

@@ -24,7 +24,7 @@ export default function AppLayout({ children }: React.PropsWithChildren) {
         />
       </head>
 
-      <body className='flex flex-col min-h-screen'>
+      <body className='flex flex-col h-screen'>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </AppRouterCacheProvider>

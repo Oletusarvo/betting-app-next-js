@@ -32,15 +32,11 @@ export function UserPageTabs({ betsCreatedContent, betsParticipatedInContent }: 
       </div>
 
       <TabsProvider.Panel index={0}>
-        <div className='w-full flex flex-col h-full items-center justify-center gap-1'>
-          {betsCreatedContent}
-        </div>
+        <div className='w-full flex flex-col h-full gap-1'>{betsCreatedContent}</div>
       </TabsProvider.Panel>
 
       <TabsProvider.Panel index={1}>
-        <div className='w-full flex flex-col h-full items-center justify-center gap-1'>
-          {betsParticipatedInContent}
-        </div>
+        <div className='w-full flex flex-col h-full  gap-1'>{betsParticipatedInContent}</div>
       </TabsProvider.Panel>
     </TabsProvider>
   );

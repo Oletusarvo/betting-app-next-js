@@ -22,9 +22,11 @@ export function DashboardHeader({ wallet, session, walletCurrency }: DashboardHe
   ];
 
   useEffect(() => {
-    socket.on('wallet_update', updatedWallet => {
-      if (wallet.id != updatedWallet) return;
-      setCurrentWallet(() => updatedWallet);
+    socket.on('wallet_update', balance => {
+      setCurrentWallet(prev => ({
+        ...prev,
+        balance,
+      }));
     });
 
     return () => {

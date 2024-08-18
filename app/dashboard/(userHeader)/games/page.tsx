@@ -8,19 +8,18 @@ import { getBidStatus } from '@/utils/getBidStatus';
 import { loadSession } from '@/utils/loadSession';
 import db from 'dbconfig';
 
-export default async function GamesPage({ searchParams }: TODO) {
+export default async function GameListPage({ searchParams }: TODO) {
   const search = searchParams?.q;
+  const query = `%${search}%`;
   const session = await loadSession();
   const games = await db('data_games')
-    .where(function () {
-      const query = `%${search}%`;
-      this.whereILike('title', query).orWhereILike('description', query);
-    })
+    .whereLike('title', query)
+    .orWhereLike('description', query)
     .orderBy('createdAt', 'desc')
     .limit(10);
 
   return (
-    <Main>
+    <>
       <AddButtonWithSearchBar
         searchPlaceholder='Search for games...'
         queryName='q'
@@ -35,7 +34,7 @@ export default async function GamesPage({ searchParams }: TODO) {
               <TypeText text='No bets yet.' />
             </div>
           }
-          ListItemComponent={async ({ item }) => {
+          ListItemComponent={async ({ item, ...props }) => {
             const [[{ pool }], [currencySymbol], [bid]] = (await Promise.all([
               db('data_bids').where({ gameId: item.id }).sum('amount', { as: 'pool' }),
               db('data_currencies').where({ id: item.currencyId }).pluck('symbol'),
@@ -43,21 +42,19 @@ export default async function GamesPage({ searchParams }: TODO) {
               db('data_bids').where({ userId: session.user.id, gameId: item.id }),
             ])) as [[{ pool: number }], [string], [BidType]];
 
-            const bidStatus = getBidStatus(bid, item);
-
             return (
               <GameItemBox
+                {...props}
                 withControls={item.authorId == session.user.id}
                 game={item}
                 pool={pool}
                 userBid={bid}
                 currencySymbol={currencySymbol}
-                status={bidStatus}
               />
             );
           }}
         />
       </div>
-    </Main>
+    </>
   );
 }

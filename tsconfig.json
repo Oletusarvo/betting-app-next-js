@@ -34,10 +34,13 @@
     "**/*.ts",
     "**/*.tsx",
     "types.d.ts",
+
     ".next/types/**/*.ts",
     "knexfile.js",
     "app/api/auth/[...nextauth]/route.js",
-    "app/api/auth/[...nextauth]/options.js"
+    "app/api/auth/[...nextauth]/options.js",
+    "server.mjs",
+    "SocketServer.mjs"
   ],
-  "exclude": ["node_modules", "server.mjs", "SocketServer.mjs"]
+  "exclude": ["node_modules"]
 }

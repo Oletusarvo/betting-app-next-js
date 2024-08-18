@@ -5,13 +5,14 @@ import { BidType } from '@/utils/classes/Bid';
 import { GameType } from '@/utils/classes/Game';
 import { getBidStatus } from '@/utils/getBidStatus';
 import { socket } from 'app/socket.mjs';
+
 import { useEffect, useState } from 'react';
 
 export function useGameUpdates(
   initialGameState: GameType & { pool?: number },
   initialUserBid?: BidType
 ) {
-  const [currentGameState, setCurrentGameState] = useState(initialGameState);
+  const [currentGameState, setCurrentGameState] = useState(() => initialGameState);
   const [currentBidStatus, setCurrentBidStatus] = useState<GameItemBoxProps['status']>(() => {
     return getBidStatus(initialUserBid, initialGameState);
   });
@@ -23,7 +24,6 @@ export function useGameUpdates(
 
       setCurrentGameState(() => updatedGame);
       setCurrentBidStatus(() => getBidStatus(initialUserBid, updatedGame));
-      console.log(currentBidStatus);
     });
 
     return () => {
@@ -34,11 +34,11 @@ export function useGameUpdates(
 
   useEffect(() => {
     setCurrentGameState(initialGameState);
-  }, [initialGameState]);
+  }, [initialGameState.pool, initialGameState.minBid]);
 
   useEffect(() => {
     setCurrentBidStatus(getBidStatus(initialUserBid, currentGameState));
-  }, [initialUserBid]);
+  }, [initialUserBid?.amount]);
 
   return {
     currentGameState,

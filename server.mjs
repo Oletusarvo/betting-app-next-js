@@ -12,8 +12,8 @@ const handler = app.getRequestHandler();
 app.prepare().then(() => {
   const httpServer = createServer(handler);
 
-  global.io = socketServer.config(httpServer);
-
+  socketServer.config(httpServer);
+  global.io = socketServer.getIo();
   httpServer
     .once('error', err => {
       console.error(err);
