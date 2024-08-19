@@ -8,6 +8,10 @@ export class Bank {
     return trx || db;
   }
 
+  private static emitWalletUpdate(walletId: string, balance: number) {
+    (global as any).io.to(`wallet-${walletId}`).emit('wallet_update', balance);
+  }
+
   /**Withdraws currency from the provided wallet id. Automatically loans from the currency reserve and mints more currency if necessary. */
   public static async withdraw(walletId: string, amount: number, trx?: Knex.Transaction) {
     if (amount < 0) {
@@ -33,6 +37,7 @@ export class Bank {
     await con('data_wallets').where({ id: walletId }).update({
       balance: balanceAfterWithdraw,
     });
+    this.emitWalletUpdate(walletId, balanceAfterWithdraw);
   }
 
   /**Deposits the correct currency to the provided wallet id. Also updates the reserve of the currency if the balance of the wallet is negative. */
@@ -61,6 +66,7 @@ export class Bank {
     await con('data_wallets').where({ id: walletId }).update({
       balance: balanceAfterDeposit,
     });
+    this.emitWalletUpdate(walletId, balanceAfterDeposit);
   }
 
   /**Mints new currency and increases its circulation. */

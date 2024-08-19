@@ -22,6 +22,7 @@ export function DashboardHeader({ wallet, session, walletCurrency }: DashboardHe
   ];
 
   useEffect(() => {
+    socket.emit('join_wallet', `wallet-${wallet.id}`);
     socket.on('wallet_update', balance => {
       setCurrentWallet(prev => ({
         ...prev,
@@ -31,6 +32,7 @@ export function DashboardHeader({ wallet, session, walletCurrency }: DashboardHe
 
     return () => {
       socket.off('wallet_update');
+      socket.emit('leave_wallet', wallet.id);
     };
   }, []);
 

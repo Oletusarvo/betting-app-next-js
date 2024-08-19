@@ -18,7 +18,7 @@ export function useGameUpdates(
   });
 
   useEffect(() => {
-    socket.emit('join_room', initialGameState.id);
+    socket.emit('join_game', initialGameState.id);
     socket.on('game_update', updatedGame => {
       if (updatedGame.id != currentGameState.id) return;
 
@@ -28,7 +28,7 @@ export function useGameUpdates(
 
     return () => {
       socket.off('game_update');
-      socket.emit('leave_room', initialGameState.id);
+      socket.emit('leave_game', initialGameState.id);
     };
   }, []);
 

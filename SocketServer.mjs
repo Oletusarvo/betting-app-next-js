@@ -19,11 +19,19 @@ class SocketServer {
           console.log(socket.id + ' disconnected.');
         });
 
-        socket.on('join_room', gameId => {
+        socket.on('join_game', gameId => {
           socket.join(`gameroom-${gameId}`);
         });
 
-        socket.on('leave_room', gameId => {
+        socket.on('join_wallet', walletId => {
+          socket.join(`wallet-${walletId}`);
+        });
+
+        socket.on('leave_wallet', walletId => {
+          socket.leave(`wallet-${walletId}`);
+        });
+
+        socket.on('leave_game', gameId => {
           socket.leave(`gameroom-${gameId}`);
         });
       });

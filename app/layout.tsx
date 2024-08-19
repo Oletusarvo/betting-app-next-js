@@ -18,6 +18,10 @@ export default function AppLayout({ children }: React.PropsWithChildren) {
   return (
     <html>
       <head>
+        <meta
+          name='application-name'
+          content={process.env.APP_NAME}
+        />
         <link
           rel='stylesheet'
           href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'
