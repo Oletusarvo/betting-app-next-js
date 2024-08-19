@@ -5,11 +5,11 @@ import { UserParticipatedBets } from './UserParticipatedBets';
 
 export default async function UserPage() {
   return (
-    <main className='flex flex-col gap-2 px-1 pb-20'>
+    <div className='flex flex-col gap-2 pb-20'>
       <UserPageTabs
         betsCreatedContent={<UserCreatedBets />}
         betsParticipatedInContent={<UserParticipatedBets />}
       />
-    </main>
+    </div>
   );
 }

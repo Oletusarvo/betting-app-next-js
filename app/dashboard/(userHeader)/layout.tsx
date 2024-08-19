@@ -27,7 +27,7 @@ export default async function DashboardLayout({ children }: TODO) {
         walletCurrency={walletCurrency}
         session={session}
       />
-      <main className='flex flex-col gap-1 flex-1 overflow-y-scroll h-[500px]'>{children}</main>
+      <main className='flex flex-col gap-1 flex-1 overflow-y-scroll px-1'>{children}</main>
 
       {BottomNav}
     </div>
