@@ -44,15 +44,6 @@ export async function UserCreatedBets() {
           );
         }}
       />
-      <div className='flex justify-end w-full mt-2'>
-        <Button
-          color='primary'
-          variant='text'
-          startIcon={<Add />}
-          href='/dashboard/createGame'>
-          Create New
-        </Button>
-      </div>
     </>
   );
 }

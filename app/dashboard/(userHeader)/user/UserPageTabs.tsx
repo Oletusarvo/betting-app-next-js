@@ -15,12 +15,7 @@ type UserPageTabsProps = {
 export function UserPageTabs({ betsCreatedContent, betsParticipatedInContent }: UserPageTabsProps) {
   return (
     <TabsProvider>
-      <div
-        className='flex w-full overflow-x-scroll text-nowrap'
-        style={{
-          msOverflowStyle: 'none',
-          scrollbarWidth: 'none',
-        }}>
+      <TabsProvider.TabContainer>
         <TabsProvider.Tab
           label='Bets created'
           index={0}
@@ -29,7 +24,7 @@ export function UserPageTabs({ betsCreatedContent, betsParticipatedInContent }: 
           label='Bets participated in'
           index={1}
         />
-      </div>
+      </TabsProvider.TabContainer>
 
       <TabsProvider.Panel index={0}>
         <div className='w-full flex flex-col h-full gap-1'>{betsCreatedContent}</div>

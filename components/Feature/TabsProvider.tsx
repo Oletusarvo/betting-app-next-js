@@ -40,4 +40,17 @@ TabsProvider.Panel = ({ children, index }: TODO) => {
   return currentTab == index && children;
 };
 
+TabsProvider.TabContainer = ({ children }: TODO) => {
+  return (
+    <div
+      className='flex w-full overflow-x-scroll text-nowrap'
+      style={{
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+      }}>
+      {children}
+    </div>
+  );
+};
+
 const useTabsContext = createUseContextHook('TabsContext', TabsContext);

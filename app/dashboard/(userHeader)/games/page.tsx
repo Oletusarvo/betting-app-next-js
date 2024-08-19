@@ -13,15 +13,15 @@ export default async function GameListPage({ searchParams }: TODO) {
   const query = `%${search}%`;
   const session = await loadSession();
   const games = await db('data_games')
-    .whereLike('title', query)
-    .orWhereLike('description', query)
+    .whereILike('title', query)
+    .orWhereILike('description', query)
     .orderBy('createdAt', 'desc')
     .limit(10);
 
   return (
     <>
       <AddButtonWithSearchBar
-        searchPlaceholder='Search for games...'
+        searchPlaceholder='Search for bets...'
         queryName='q'
         addUrl='/dashboard/createGame'
       />

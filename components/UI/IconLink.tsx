@@ -1,4 +1,5 @@
 import { IconButton } from '@mui/material';
+import colors from 'colors';
 import Link from 'next/link';
 import React from 'react';
 import { useEffect, useRef } from 'react';
@@ -16,8 +17,8 @@ export function IconLink({ selected = false, icon, ...props }: IconLinkProps) {
         sx: {
           ...icon.props.sx,
           fontSize: '2rem',
+          color: (selected && colors.primary) || colors.darkGrey,
         },
-        className: [selected ? 'text-primary' : 'text-darkGrey'].join(' '),
       })}
     </IconButton>
   );

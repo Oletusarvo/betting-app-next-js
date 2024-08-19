@@ -37,7 +37,7 @@ export function DashboardHeader({ wallet, session, walletCurrency }: DashboardHe
   }, []);
 
   return (
-    <header className='w-full flex pt-8 pb-4 px-2 items-center bg-darkGrey sticky top-0 z-10 text-white justify-between shadow-md'>
+    <header className='w-full flex py-4 px-2 items-center bg-darkGrey sticky top-0 z-10 text-white justify-between shadow-md'>
       <Menu
         trigger={
           <ProfileCoin

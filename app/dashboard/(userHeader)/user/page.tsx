@@ -5,7 +5,7 @@ import { UserParticipatedBets } from './UserParticipatedBets';
 
 export default async function UserPage() {
   return (
-    <div className='flex flex-col gap-2 pb-20'>
+    <div className='flex flex-col gap-2'>
       <UserPageTabs
         betsCreatedContent={<UserCreatedBets />}
         betsParticipatedInContent={<UserParticipatedBets />}

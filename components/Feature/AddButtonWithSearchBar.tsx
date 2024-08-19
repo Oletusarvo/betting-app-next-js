@@ -21,15 +21,6 @@ export function AddButtonWithSearchBar({
         queryName={queryName}
         placeholder={searchPlaceholder}
       />
-
-      <Link href={addUrl}>
-        <Button
-          type='button'
-          variant='contained'
-          startIcon={<Add />}>
-          Add
-        </Button>
-      </Link>
     </div>
   );
 }

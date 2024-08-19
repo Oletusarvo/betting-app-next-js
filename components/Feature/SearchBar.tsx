@@ -14,12 +14,12 @@ function SearchIcon({ loading }: { loading: boolean }) {
   );
 }
 export function SearchBar({ queryName, placeholder }: { queryName: string; placeholder: string }) {
-  const { updateQuery, status } = useQueryParam('', queryName, 1000);
+  const { updateQuery, status } = useQueryParam('', queryName, 300);
 
   return (
     <div className='relative items-center flex w-full'>
       <input
-        className='h-full px-2 w-full text-blue-800 border-[2px] border-slate-200'
+        className='h-full p-2 w-full text-blue-800 border-[2px] border-slate-200 text-lg'
         name='search'
         type='search'
         placeholder={placeholder}
